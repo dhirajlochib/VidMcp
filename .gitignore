@@ -53,4 +53,8 @@ final_output/
 *.onnx
 *.safetensors
 vidmcp-site-hostinger.zip
-vidmcp-site-hostinger.zip
+
+# Local agent maintainability (do not publish)
+MEMORY.md
+DEVOPS.md
+.agent-memory/
