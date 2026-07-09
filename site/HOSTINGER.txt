@@ -1,0 +1,6 @@
+Hostinger upload (vidmcp.com)
+=============================
+1. hPanel → File Manager → public_html
+2. Upload ALL files INSIDE this site/ folder (index.html, css/, js/, assets/, …)
+3. SSL: hPanel → SSL → Enable for vidmcp.com
+4. Test: https://vidmcp.com

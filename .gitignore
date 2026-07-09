@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Caches / IDE
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.cache/
+hf_cache/
+/models/  # ML weight cache only; not src/vidmcp/models
+weights/
+.idea/
+.vscode/
+.DS_Store
+
+# Runtime
+workspaces/*
+!workspaces/.gitkeep
+*.log
+tmp/
+_work*/
+
+# Local media dumps (keep curated demos + site assets)
+*.mov
+*.avi
+*.mkv
+*.wav
+*.aiff
+final_output/
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.safetensors
+vidmcp-site-hostinger.zip
+vidmcp-site-hostinger.zip

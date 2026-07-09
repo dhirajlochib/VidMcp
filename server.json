@@ -1,0 +1,47 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.dhirajlochib/VidMcp",
+  "description": "AI video editing MCP by Dhiraj Lochib (vidmcp.com) \u2014 SAM 3.1, behind-the-subject VFX, education scenes.",
+  "version": "1.0.2",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/dhirajlochib/VidMcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "vidmcp",
+      "version": "1.0.2",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "VIDMCP_WORKSPACE_ROOT",
+          "description": "Projects and renders directory",
+          "isRequired": false,
+          "default": "./workspaces"
+        },
+        {
+          "name": "VIDMCP_SAM_BACKEND",
+          "description": "mock | mlx | auto | ultralytics | official",
+          "isRequired": false,
+          "default": "mock"
+        },
+        {
+          "name": "VIDMCP_MLX_MODEL_ID",
+          "description": "HF model id for MLX SAM on Apple Silicon",
+          "isRequired": false,
+          "default": "mlx-community/sam3.1-bf16"
+        },
+        {
+          "name": "HF_TOKEN",
+          "description": "Hugging Face token for gated weights",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

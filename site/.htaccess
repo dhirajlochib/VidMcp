@@ -1,0 +1,35 @@
+# Hostinger / Apache
+RewriteEngine On
+
+# Force HTTPS (uncomment after SSL is active on Hostinger)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# www → apex (optional)
+# RewriteCond %{HTTP_HOST} ^www\.vidmcp\.com$ [NC]
+# RewriteRule ^ https://vidmcp.com%{REQUEST_URI} [L,R=301]
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Cache static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/gif "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/xml text/xml
+</IfModule>
+
+ErrorDocument 404 /index.html

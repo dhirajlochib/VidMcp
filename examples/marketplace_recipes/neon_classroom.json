@@ -1,0 +1,17 @@
+{
+  "name": "neon_classroom",
+  "description": "Education plate + soft neon grade + light particles behind speaker",
+  "subject_prompt": "person",
+  "alternate_prompts": ["speaker", "teacher"],
+  "style_tags": ["cyberpunk", "particles"],
+  "effects": [
+    {"effect_type": "cyberpunk", "kind": "background", "params": {"blur_radius": 15, "scanlines": true}, "name": "neon_bg"},
+    {"effect_type": "particles", "kind": "particles", "params": {"style": "neon_dust", "density": 0.3}, "blend_mode": "screen", "name": "dust"}
+  ],
+  "generate_broll": false,
+  "math_scene": true,
+  "conf": 0.25,
+  "max_passes": 2,
+  "author": "vidmcp-community",
+  "version": "1.0.0"
+}

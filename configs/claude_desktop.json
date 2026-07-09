@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "vidmcp": {
+      "command": "REPLACE_WITH_ABS_PATH/vidmcp/.venv/bin/vidmcp",
+      "env": {
+        "VIDMCP_SAM_BACKEND": "mock",
+        "VIDMCP_WORKSPACE_ROOT": "REPLACE_WITH_ABS_PATH/vidmcp/workspaces"
+      }
+    }
+  }
+}
