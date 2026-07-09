@@ -121,20 +121,21 @@
       <p class="lead">Start on mock (no GPU). Flip to MLX on Apple Silicon for real mattes.</p>
       <div class="dev-grid">
         <div class="code">
-          <div class="code-bar">shell <button type="button" data-copy="git clone https://github.com/dhirajlochib/VidMcp.git && cd VidMcp && python3 -m venv .venv && source .venv/bin/activate && pip install -e . && export VIDMCP_SAM_BACKEND=mock && vidmcp">Copy</button></div>
-          <pre><span class="cm"># clone + run</span>
-<span class="fn">git clone</span> https://github.com/dhirajlochib/VidMcp.git
-<span class="fn">cd</span> VidMcp && <span class="fn">python3 -m venv</span> .venv
-<span class="fn">source</span> .venv/bin/activate && <span class="fn">pip install</span> -e .
-<span class="fn">export</span> <span class="kw">VIDMCP_SAM_BACKEND</span>=mock
-<span class="fn">vidmcp</span></pre>
+          <div class="code-bar">shell <button type="button" data-copy="uv tool install vidmcp && vidmcp --doctor">Copy</button></div>
+          <pre><span class="cm"># recommended</span>
+<span class="fn">uv tool install</span> vidmcp
+<span class="fn">vidmcp</span> --doctor
+
+<span class="cm"># or one-shot</span>
+<span class="fn">uvx</span> vidmcp</pre>
         </div>
         <div class="code">
           <div class="code-bar">MCP Server Config</div>
           <pre>{
   <span class="st">"mcpServers"</span>: {
     <span class="st">"vidmcp"</span>: {
-      <span class="st">"command"</span>: <span class="st">"/path/to/VidMcp/.venv/bin/vidmcp"</span>,
+      <span class="st">"command"</span>: <span class="st">"uvx"</span>,
+      <span class="st">"args"</span>: [<span class="st">"vidmcp"</span>],
       <span class="st">"env"</span>: {
         <span class="st">"VIDMCP_SAM_BACKEND"</span>: <span class="st">"mock"</span>
       }

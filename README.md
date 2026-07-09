@@ -70,48 +70,77 @@ python scripts/generate_samples.py
 
 ## Install
 
-**Needs:** Python 3.11+, [ffmpeg](https://ffmpeg.org/)
+**Needs:** Python 3.11+, [ffmpeg](https://ffmpeg.org/), [uv](https://docs.astral.sh/uv/) (recommended)
+
+### One-liner (recommended)
 
 ```bash
-git clone https://github.com/dhirajlochib/VidMcp.git
-cd VidMcp
-python3 -m venv .venv && source .venv/bin/activate
-pip install -e .
-
-export VIDMCP_SAM_BACKEND=mock
-export VIDMCP_WORKSPACE_ROOT=./workspaces
+uv tool install vidmcp
 vidmcp --doctor
-vidmcp
 ```
 
-### Optional
+Or without a global tool install:
 
 ```bash
-pip install -e ".[mlx]"   # Apple Silicon SAM 3.1
-pip install -e ".[sam]"   # CUDA
-pip install -e ".[dev]"   # tests
+uvx vidmcp
 ```
 
----
+Classic pip:
 
-## MCP (Claude Desktop)
+```bash
+pip install vidmcp
+```
+
+### Grok / Claude / Cursor (MCP)
+
+**Grok:**
+
+```bash
+grok mcp add vidmcp \
+  -e VIDMCP_SAM_BACKEND=mock \
+  -e VIDMCP_WORKSPACE_ROOT="$HOME/vidmcp-workspaces" \
+  -- $(which vidmcp)
+# or: -- uvx vidmcp
+grok mcp doctor vidmcp
+```
+
+**Claude Desktop** — `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "vidmcp": {
-      "command": "/ABS/PATH/VidMcp/.venv/bin/vidmcp",
+      "command": "uvx",
+      "args": ["vidmcp"],
       "env": {
         "VIDMCP_SAM_BACKEND": "mock",
-        "VIDMCP_WORKSPACE_ROOT": "/ABS/PATH/VidMcp/workspaces"
+        "VIDMCP_WORKSPACE_ROOT": "/Users/YOU/vidmcp-workspaces"
       }
     }
   }
 }
 ```
 
+**Claude Code:**
+
 ```bash
-claude mcp add vidmcp -s user -- /ABS/PATH/VidMcp/.venv/bin/vidmcp
+claude mcp add vidmcp -s user -- uvx vidmcp
+```
+
+### Optional extras
+
+```bash
+uv tool install 'vidmcp[mlx]'   # Apple Silicon SAM 3.1
+uv tool install 'vidmcp[sam]'   # CUDA / Ultralytics
+```
+
+### From source (dev)
+
+```bash
+git clone https://github.com/dhirajlochib/VidMcp.git
+cd VidMcp
+uv venv && source .venv/bin/activate
+uv pip install -e ".[dev]"
 ```
 
 ---
