@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://vidmcp.com"><img alt="Website" src="https://img.shields.io/badge/vidmcp.com-d4ff2a?style=flat-square&labelColor=050507&color=d4ff2a" /></a>
-  <a href="https://pypi.org/project/vidmcp/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-1.1.0-2affd1?style=flat-square&labelColor=050507" /></a>
+  <a href="https://pypi.org/project/vidmcp/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-2affd1?style=flat-square&labelColor=050507" /></a>
   <a href="https://dhirajlochib.com/"><img alt="Author" src="https://img.shields.io/badge/Dhiraj%20Lochib-b18cff?style=flat-square&labelColor=050507" /></a>
   <img alt="Python" src="https://img.shields.io/badge/Python_3.11+-ffa24e?style=flat-square&labelColor=050507" />
   <img alt="License" src="https://img.shields.io/badge/MIT-efefeb?style=flat-square&labelColor=050507" />
@@ -23,7 +23,7 @@
 
 ---
 
-## What’s new in 1.1 — Creator pipeline
+## Creator polish pipeline
 
 One call for a publish-ready talk-head:
 
@@ -90,7 +90,7 @@ MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` 
 
 | Sample | GIF | MP4 |
 |--------|-----|-----|
-| **Creator 1.1** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.mp4) |
+| **Creator polish** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.mp4) |
 | Flow field | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.mp4) |
 | Tesseract | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.mp4) |
 | Behind the subject | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.mp4) |

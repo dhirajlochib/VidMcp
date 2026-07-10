@@ -7,25 +7,21 @@
   $("#burger")?.addEventListener("click", () => $("#navlinks")?.classList.toggle("open"));
   $$("#navlinks a").forEach((a) => a.addEventListener("click", () => $("#navlinks")?.classList.remove("open")));
 
-  // staggered reveal
   const io = new IntersectionObserver(
     (ents) => {
-      ents.forEach((e, i) => {
+      ents.forEach((e) => {
         if (!e.isIntersecting) return;
-        const el = e.target;
-        el.style.transitionDelay = `${Math.min(i * 40, 200)}ms`;
-        el.classList.add("show");
-        io.unobserve(el);
+        e.target.classList.add("show");
+        io.unobserve(e.target);
       });
     },
     { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
   );
-  $$(".fade, .card-soft, .g-card, .flow-step").forEach((el) => {
+  $$(".fade, .card-soft, .g-card, .flow-step, .cl-item").forEach((el) => {
     if (!el.classList.contains("fade")) el.classList.add("fade");
     io.observe(el);
   });
 
-  // video modal
   const modal = $("#modal"),
     mv = $("#modal-video"),
     mt = $("#modal-title");
@@ -52,7 +48,6 @@
   modal?.addEventListener("click", (e) => e.target === modal && close());
   window.addEventListener("keydown", (e) => e.key === "Escape" && close());
 
-  // contact
   $("#contact-form")?.addEventListener("submit", (e) => {
     e.preventDefault();
     const f = e.currentTarget,
@@ -69,7 +64,6 @@
     if (st) st.textContent = "Opening your email app…";
   });
 
-  // copy buttons
   async function copyText(btn, text) {
     try {
       await navigator.clipboard.writeText(text || "");
@@ -82,11 +76,8 @@
       }, 1400);
     } catch {}
   }
-  $$("[data-copy]").forEach((btn) =>
-    btn.addEventListener("click", () => copyText(btn, btn.dataset.copy || ""))
-  );
+  $$("[data-copy]").forEach((btn) => btn.addEventListener("click", () => copyText(btn, btn.dataset.copy || "")));
 
-  // install terminal tabs
   const term = $("#install-term");
   if (term) {
     $$(".term-tab", term).forEach((tab) => {
@@ -94,9 +85,60 @@
         $$(".term-tab", term).forEach((t) => t.classList.remove("on"));
         $$(".term-panel", term).forEach((p) => p.classList.remove("on"));
         tab.classList.add("on");
-        const panel = term.querySelector(`[data-panel="${tab.dataset.tab}"]`);
-        panel?.classList.add("on");
+        term.querySelector(`[data-panel="${tab.dataset.tab}"]`)?.classList.add("on");
       });
     });
+  }
+
+  // soft particle field behind hero
+  const canvas = $("#hero-canvas");
+  if (canvas && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const ctx = canvas.getContext("2d");
+    let w, h, pts, raf;
+    const resize = () => {
+      w = canvas.width = innerWidth;
+      h = canvas.height = Math.min(innerHeight * 0.95, 900);
+      const n = Math.min(70, Math.floor((w * h) / 18000));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.6 + 0.4,
+      }));
+    };
+    const tick = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of pts) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(212,255,42,0.35)";
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const a = pts[i],
+            b = pts[j];
+          const dx = a.x - b.x,
+            dy = a.y - b.y;
+          const d = Math.hypot(dx, dy);
+          if (d < 120) {
+            ctx.strokeStyle = `rgba(42,255,209,${0.08 * (1 - d / 120)})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    resize();
+    tick();
+    addEventListener("resize", resize, { passive: true });
   }
 })();

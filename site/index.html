@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VidMCP 1.1 — Creator video MCP by Dhiraj Lochib</title>
-  <meta name="description" content="VidMCP 1.1: agent video editing MCP — denoise, BGM, captions, BG replace, portrait-safe export. By Dhiraj Lochib." />
+  <title>VidMCP — video tools agents can run · Dhiraj Lochib</title>
+  <meta name="description" content="VidMCP is an MCP server for agent video editing — mattes, behind-the-subject VFX, denoise, BGM, captions, and export. Built by Dhiraj Lochib." />
   <meta name="theme-color" content="#050507" />
   <link rel="canonical" href="https://vidmcp.com/" />
-  <meta property="og:title" content="VidMCP 1.1 — video tools agents can run" />
-  <meta property="og:description" content="Orient · denoise · BGM · captions · BG replace · export. MCP for Grok, Cursor, Claude." />
+  <meta property="og:title" content="VidMCP — Agents cut video" />
+  <meta property="og:description" content="Text-prompt mattes, audio polish, captions, BG replace. MCP for Grok, Cursor, Claude." />
   <meta property="og:image" content="https://vidmcp.com/assets/demos/07_creator_polish.jpg" />
   <meta property="og:url" content="https://vidmcp.com/" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -21,14 +21,15 @@
 <body>
   <div class="bg-mesh" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
 
   <header class="nav" id="navtop">
     <div class="nav-in">
       <a class="logo" href="#top"><i></i> VidMCP</a>
       <nav class="nav-links" id="navlinks">
         <a href="#work">Work</a>
-        <a href="#v11">1.1</a>
         <a href="#product">Product</a>
+        <a href="#changelog">Changelog</a>
         <a href="#dev">Install</a>
         <a href="#about">About</a>
         <a class="gh" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
@@ -39,74 +40,58 @@
 
   <div class="page" id="top">
     <!-- HERO -->
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="status"><i></i> v1.1 · MCP · Open source · PyPI</div>
-        <h1>
-          <span class="line">Agents don’t describe video.</span>
-          <span class="line"><em>They cut it.</em></span>
-        </h1>
-        <p class="hero-sub">
-          <strong>VidMCP</strong> is a production MCP server for talk-head polish —
-          denoise, BGM, captions, background replace, and portrait-safe export —
-          built for Grok, Cursor, Claude, and any MCP host.
-        </p>
-        <div class="btns">
-          <a class="btn btn-primary" href="#dev">Install 1.1</a>
-          <a class="btn" href="#work">Watch samples</a>
-          <a class="btn" href="https://pypi.org/project/vidmcp/" target="_blank" rel="noopener">PyPI</a>
+    <section class="hero hero-full">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot"></span> Open MCP · Video for agents</p>
+          <h1>
+            <span class="h-line">Don’t describe the cut.</span>
+            <span class="h-line h-grad">Run it.</span>
+          </h1>
+          <p class="hero-sub">
+            VidMCP gives Grok, Cursor, and Claude real tools to segment, denoise,
+            caption, replace backgrounds, and export — not a chat about FFmpeg.
+          </p>
+          <div class="btns">
+            <a class="btn btn-primary" href="#dev">Install</a>
+            <a class="btn" href="#work">See work</a>
+            <a class="btn" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
+          </div>
+          <div class="hero-pills">
+            <span>text-prompt matte</span>
+            <span>behind subject</span>
+            <span>denoise + BGM</span>
+            <span>captions</span>
+            <span>9:16 export</span>
+          </div>
         </div>
-        <div class="hero-stats">
-          <div><b>~89</b><span>MCP tools</span></div>
-          <div><b>1.1</b><span>Creator pipeline</span></div>
-          <div><b>MIT</b><span>Open source</span></div>
+        <div class="hero-stage">
+          <div class="stage-glow" aria-hidden="true"></div>
+          <div class="stage-frame">
+            <video autoplay muted loop playsinline poster="assets/demos/07_creator_polish.jpg">
+              <source src="assets/demos/07_creator_polish.mp4" type="video/mp4" />
+            </video>
+            <div class="stage-ui">
+              <span class="rec"><i></i> REC</span>
+              <span class="badge">matte · live</span>
+            </div>
+          </div>
+          <div class="stage-float f1">process_audio</div>
+          <div class="stage-float f2">mix_bgm</div>
+          <div class="stage-float f3">export_render</div>
         </div>
-      </div>
-      <div class="hero-stage">
-        <div class="stage-ring" aria-hidden="true"></div>
-        <div class="stage-frame">
-          <video autoplay muted loop playsinline poster="assets/demos/07_creator_polish.jpg">
-            <source src="assets/demos/07_creator_polish.mp4" type="video/mp4" />
-          </video>
-          <div class="chip-live">● CREATOR · LIVE</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 1.1 -->
-    <section class="sec fade" id="v11">
-      <div class="sec-head"><div class="sec-n">00</div><div class="sec-t">New in 1.1</div><div class="sec-l"></div></div>
-      <h2>Creator polish pipeline</h2>
-      <p class="lead">Portrait-safe import, denoise, BGM duck, captions, BG replace, export presets — one MCP call.</p>
-      <div class="chip-row">
-        <span class="chip">orient</span>
-        <span class="chip">process_audio</span>
-        <span class="chip">mix_bgm</span>
-        <span class="chip">captions</span>
-        <span class="chip">replace_background</span>
-        <span class="chip">smart_cut</span>
-        <span class="chip">export_render</span>
-      </div>
-      <div class="code-wrap">
-        <div class="code-bar">
-          <span>python · one-shot</span>
-          <button type="button" data-copy="from vidmcp.tools.creator import run_talking_head_polish
-print(run_talking_head_polish('talk.mov', preset='reels_9x16', bg_mode='space'))">Copy</button>
-        </div>
-        <pre><code><span class="fn">from</span> vidmcp.tools.creator <span class="fn">import</span> run_talking_head_polish
-print(run_talking_head_polish(<span class="str">'talk.mov'</span>, preset=<span class="str">'reels_9x16'</span>, bg_mode=<span class="str">'space'</span>))</code></pre>
       </div>
     </section>
 
     <!-- WORK -->
     <section class="sec fade" id="work">
-      <div class="sec-head"><div class="sec-n">01</div><div class="sec-t">Selected work</div><div class="sec-l"></div></div>
-      <h2>Samples</h2>
-      <p class="lead">Click any card to play. Synthetic demos only — no personal footage.</p>
+      <div class="sec-head"><div class="sec-n">01</div><div class="sec-t">Work</div><div class="sec-l"></div></div>
+      <h2>Selected plates</h2>
+      <p class="lead">Synthetic demos only. Click to play.</p>
       <div class="gallery">
-        <article class="g-card big" data-video="assets/demos/07_creator_polish.mp4" data-title="Creator 1.1">
-          <div class="thumb"><img src="assets/demos/07_creator_polish.jpg" alt="Creator 1.1" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">New · 1.1</div><h3>Creator polish</h3><p>Orient · denoise · BGM · captions · export</p></div>
+        <article class="g-card big" data-video="assets/demos/07_creator_polish.mp4" data-title="Creator polish">
+          <div class="thumb"><img src="assets/demos/07_creator_polish.jpg" alt="Creator polish" /><div class="play">▶</div></div>
+          <div class="g-meta"><div class="tag">Pipeline</div><h3>Creator polish</h3><p>Orient · denoise · BGM · captions · export</p></div>
         </article>
         <article class="g-card" data-video="assets/demos/03_behind_subject.mp4" data-title="Behind the subject">
           <div class="thumb"><img src="assets/demos/03_behind_subject.jpg" alt="Behind subject" loading="lazy" /><div class="play">▶</div></div>
@@ -130,35 +115,67 @@ print(run_talking_head_polish(<span class="str">'talk.mov'</span>, preset=<span 
     <!-- PRODUCT -->
     <section class="sec fade" id="product">
       <div class="sec-head"><div class="sec-n">02</div><div class="sec-t">Product</div><div class="sec-l"></div></div>
-      <h2>Built for agents, not dashboards</h2>
+      <h2>What agents can actually do</h2>
       <div class="grid3">
-        <article class="card-soft"><div class="tag">Audio</div><h3>Denoise + BGM</h3><p>afftdn · compressor · loudnorm. Ambient pad ducked under speech.</p></article>
+        <article class="card-soft"><div class="tag">Audio</div><h3>Denoise + BGM</h3><p>Clean vocals, loudnorm, ambient pad ducked under speech.</p></article>
         <article class="card-soft"><div class="tag">Orient</div><h3>Portrait-safe</h3><p>Phone rotation baked on import. Export 9:16 / 16:9 without stretch.</p></article>
-        <article class="card-soft"><div class="tag">Matte</div><h3>Behind subject</h3><p>SAM / MLX / MediaPipe cutouts. Plates composite under the person.</p></article>
-        <article class="card-soft"><div class="tag">Captions</div><h3>Speech burn-in</h3><p>Whisper word timelines + brand styles.</p></article>
+        <article class="card-soft"><div class="tag">Matte</div><h3>Behind subject</h3><p>Text-prompt cutouts. Plates and particles live under the person.</p></article>
+        <article class="card-soft"><div class="tag">Captions</div><h3>Speech burn-in</h3><p>Word timelines + brand styles. Infographic cards from keywords.</p></article>
         <article class="card-soft"><div class="tag">Edit</div><h3>Smart cuts</h3><p>Drop dead air and long fillers from the transcript.</p></article>
-        <article class="card-soft"><div class="tag">MCP</div><h3>~89 tools</h3><p>Recipes, harness gates, education lessons — pack-aware for agents.</p></article>
+        <article class="card-soft"><div class="tag">MCP</div><h3>Tool packs</h3><p>Recipes and pack-aware paths so agents don’t wander 80 tools blind.</p></article>
+      </div>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section class="sec fade" id="changelog">
+      <div class="sec-head"><div class="sec-n">03</div><div class="sec-t">Changelog</div><div class="sec-l"></div></div>
+      <h2>What’s shipping</h2>
+      <p class="lead">Recent product surface — no version spam, just what landed.</p>
+      <div class="changelog">
+        <article class="cl-item">
+          <div class="cl-date">Latest</div>
+          <div class="cl-body">
+            <h3>Creator polish path</h3>
+            <ul>
+              <li><code>run_talking_head_polish</code> — one-shot orient → denoise → BGM → captions → export</li>
+              <li><code>process_audio</code> · <code>mix_bgm</code> · <code>transcribe_and_caption</code></li>
+              <li><code>replace_background</code> · <code>smart_cut_hesitations</code> · <code>export_render</code></li>
+              <li>Portrait rotation baked on <code>import_video</code> by default</li>
+            </ul>
+          </div>
+        </article>
+        <article class="cl-item">
+          <div class="cl-date">Core</div>
+          <div class="cl-body">
+            <h3>Matte · compose · educate</h3>
+            <ul>
+              <li>Text-prompt subject tracking (SAM / MLX / mock)</li>
+              <li>Behind-the-subject effects and plates</li>
+              <li>Math / education scenes and harness recipes</li>
+            </ul>
+          </div>
+        </article>
       </div>
     </section>
 
     <!-- FLOW -->
     <section class="sec fade" id="flow">
-      <div class="sec-head"><div class="sec-n">03</div><div class="sec-t">Flow</div><div class="sec-l"></div></div>
-      <h2>From import to export</h2>
+      <div class="sec-head"><div class="sec-n">04</div><div class="sec-t">Flow</div><div class="sec-l"></div></div>
+      <h2>Import → export</h2>
       <div class="flow-steps">
         <div class="flow-step"><div class="n">01</div><div><strong>import_video</strong><span>Bake orientation upright</span></div></div>
         <div class="flow-step"><div class="n">02</div><div><strong>process_audio · mix_bgm</strong><span>Clean vocals + cinematic bed</span></div></div>
         <div class="flow-step"><div class="n">03</div><div><strong>replace_background</strong><span>Matte + space / blur plate</span></div></div>
-        <div class="flow-step"><div class="n">04</div><div><strong>transcribe_and_caption</strong><span>Whisper + brand burn-in</span></div></div>
-        <div class="flow-step"><div class="n">05</div><div><strong>export_render</strong><span>reels_9x16 · youtube_16x9 · square</span></div></div>
+        <div class="flow-step"><div class="n">04</div><div><strong>transcribe_and_caption</strong><span>Words + brand burn-in</span></div></div>
+        <div class="flow-step"><div class="n">05</div><div><strong>export_render</strong><span>reels · youtube · square</span></div></div>
       </div>
     </section>
 
     <!-- INSTALL -->
     <section class="sec fade" id="dev">
-      <div class="sec-head"><div class="sec-n">04</div><div class="sec-t">Install</div><div class="sec-l"></div></div>
+      <div class="sec-head"><div class="sec-n">05</div><div class="sec-t">Install</div><div class="sec-l"></div></div>
       <h2>Ship in one line</h2>
-      <p class="lead">Terminal UI — copy any block. Needs Python 3.11+ and ffmpeg.</p>
+      <p class="lead">Needs Python 3.11+ and ffmpeg. Copy any block.</p>
       <div class="install-grid">
         <div class="term" id="install-term">
           <div class="term-tabs">
@@ -170,33 +187,33 @@ print(run_talking_head_polish(<span class="str">'talk.mov'</span>, preset=<span 
             <div class="term-bar">
               <div class="term-dots" aria-hidden="true"><i></i><i></i><i></i></div>
               <span class="term-title">zsh · install</span>
-              <button type="button" class="term-copy" data-copy="uv tool install 'vidmcp>=1.1.0'
+              <button type="button" class="term-copy" data-copy="uv tool install vidmcp
 vidmcp --doctor">Copy</button>
             </div>
             <div class="term-body">
-              <div><span class="prompt">$</span> <span class="cmd">uv tool install</span> <span class="str">'vidmcp&gt;=1.1.0'</span></div>
+              <div><span class="prompt">$</span> <span class="cmd">uv tool install</span> <span class="str">vidmcp</span></div>
               <div><span class="prompt">$</span> <span class="cmd">vidmcp --doctor</span></div>
-              <div class="out">OK ffmpeg · MCP · creator_path ready</div>
+              <div class="out">OK ffmpeg · server · tools</div>
             </div>
           </div>
           <div class="term-panel" data-panel="pip">
             <div class="term-bar">
               <div class="term-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-              <span class="term-title">pip · creator extras</span>
+              <span class="term-title">pip · extras</span>
               <button type="button" class="term-copy" data-copy="pip install 'vidmcp[creator]'">Copy</button>
             </div>
             <div class="term-body">
               <div><span class="prompt">$</span> <span class="cmd">pip install</span> <span class="str">'vidmcp[creator]'</span></div>
-              <div class="cmt"># + faster-whisper + mediapipe</div>
+              <div class="cmt"># Whisper + MediaPipe for captions &amp; fast matte</div>
             </div>
           </div>
           <div class="term-panel" data-panel="mcp">
             <div class="term-bar">
               <div class="term-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-              <span class="term-title">mcp · env</span>
+              <span class="term-title">mcp · host</span>
               <button type="button" class="term-copy" data-copy="uvx vidmcp
-# env: VIDMCP_SAM_BACKEND=mock
-#      VIDMCP_WORKSPACE_ROOT=~/vidmcp-workspaces">Copy</button>
+# VIDMCP_SAM_BACKEND=mock
+# VIDMCP_WORKSPACE_ROOT=~/vidmcp-workspaces">Copy</button>
             </div>
             <div class="term-body">
               <div><span class="prompt">$</span> <span class="cmd">uvx vidmcp</span></div>
@@ -208,19 +225,15 @@ vidmcp --doctor">Copy</button>
         <div class="install-side">
           <div class="install-card">
             <h4>One-shot polish</h4>
-            <p>MCP tool <code>run_talking_head_polish</code> — orient → denoise → BGM → captions → export.</p>
+            <p>Tool <code>run_talking_head_polish</code> — full pipeline without juggling 20 calls.</p>
           </div>
           <div class="install-card">
-            <h4>Apple Silicon matte</h4>
+            <h4>Apple Silicon</h4>
             <p><code>pip install 'vidmcp[mlx]'</code> then <code>VIDMCP_SAM_BACKEND=mlx</code>.</p>
           </div>
           <div class="install-card">
             <h4>Source</h4>
             <p><a href="https://github.com/dhirajlochib/VidMcp" style="color:var(--lime)">github.com/dhirajlochib/VidMcp</a></p>
-          </div>
-          <div class="btns" style="margin-top:4px">
-            <a class="btn btn-primary" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn" href="https://pypi.org/project/vidmcp/" target="_blank" rel="noopener">PyPI</a>
           </div>
         </div>
       </div>
@@ -228,7 +241,7 @@ vidmcp --doctor">Copy</button>
 
     <!-- ABOUT -->
     <section class="sec fade" id="about">
-      <div class="sec-head"><div class="sec-n">05</div><div class="sec-t">About</div><div class="sec-l"></div></div>
+      <div class="sec-head"><div class="sec-n">06</div><div class="sec-t">About</div><div class="sec-l"></div></div>
       <h2>Dhiraj Lochib</h2>
       <p class="lead">Full-stack, blockchain, AI. VidMCP is open MIT — agents that cut video, not just describe it.</p>
       <div class="about-row btns">
@@ -240,25 +253,14 @@ vidmcp --doctor">Copy</button>
 
     <!-- CONTACT -->
     <section class="sec fade" id="contact">
-      <div class="sec-head"><div class="sec-n">06</div><div class="sec-t">Contact</div><div class="sec-l"></div></div>
+      <div class="sec-head"><div class="sec-n">07</div><div class="sec-t">Contact</div><div class="sec-l"></div></div>
       <h2>Build with us</h2>
       <div class="contact-grid">
-        <div>
-          <p class="lead" style="margin-bottom:0">Ideas, collabs, or “I tried the MCP” — drop a note. Opens your mail app to dhirajch145@gmail.com.</p>
-        </div>
+        <p class="lead" style="margin:0">Collabs, bugs, or “I tried the MCP” — opens your mail app.</p>
         <form class="contact-form" id="contact-form" data-to="dhirajch145@gmail.com">
-          <label class="field">
-            <span>Name</span>
-            <input name="name" required autocomplete="name" placeholder="Your name" />
-          </label>
-          <label class="field">
-            <span>Email</span>
-            <input name="email" type="email" required autocomplete="email" placeholder="you@domain.com" />
-          </label>
-          <label class="field">
-            <span>Message</span>
-            <textarea name="message" required rows="4" placeholder="What are you building?"></textarea>
-          </label>
+          <label class="field"><span>Name</span><input name="name" required autocomplete="name" placeholder="Your name" /></label>
+          <label class="field"><span>Email</span><input name="email" type="email" required autocomplete="email" placeholder="you@domain.com" /></label>
+          <label class="field"><span>Message</span><textarea name="message" required rows="4" placeholder="What are you building?"></textarea></label>
           <button class="btn btn-primary" type="submit">Send message</button>
           <p id="form-status"></p>
         </form>
@@ -266,7 +268,7 @@ vidmcp --doctor">Copy</button>
     </section>
 
     <footer class="foot">
-      <div>© <span id="y"></span> Dhiraj Lochib · VidMCP 1.1 · MIT</div>
+      <div>© <span id="y"></span> Dhiraj Lochib · VidMCP · MIT</div>
       <div class="foot-links">
         <a href="https://vidmcp.com">vidmcp.com</a>
         <a href="https://github.com/dhirajlochib/VidMcp">GitHub</a>
