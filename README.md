@@ -65,11 +65,6 @@ MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` 
   <sub><b>1.1 Creator polish</b> — orient · denoise · BGM · captions · export</sub>
 </p>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.gif" width="480" alt="BG replace" /><br/>
-  <sub><b>Background replace</b> — person matte over animated space plate</sub>
-</p>
-
 <table>
   <tr>
     <td align="center" width="50%">
@@ -96,7 +91,6 @@ MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` 
 | Sample | GIF | MP4 |
 |--------|-----|-----|
 | **Creator 1.1** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.mp4) |
-| **BG replace** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.mp4) |
 | Flow field | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.mp4) |
 | Tesseract | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.mp4) |
 | Behind the subject | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.mp4) |
