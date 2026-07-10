@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 RECIPES: dict[str, dict[str, Any]] = {
     "talking_head_polish": {
         "name": "talking_head_polish",

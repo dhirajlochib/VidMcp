@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -22,12 +22,11 @@ class FailureStore:
         eid = str(uuid4())[:8]
         row = {
             "id": eid,
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": datetime.now(UTC).isoformat(),
             **event,
         }
-        with self._lock:
-            with open(self.path, "ab") as f:
-                f.write(orjson.dumps(row) + b"\n")
+        with self._lock, open(self.path, "ab") as f:
+            f.write(orjson.dumps(row) + b"\n")
         return eid
 
     def load(self, limit: int = 500) -> list[dict[str, Any]]:

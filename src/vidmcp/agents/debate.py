@@ -99,7 +99,7 @@ def propose_edit_strategies(
     winner = strategies[0]
     debate_log = [
         f"Planner intent tags: {base.style_tags}",
-        f"Critic prefers higher quality unless latency-critical.",
+        "Critic prefers higher quality unless latency-critical.",
         f"Winner: {winner['id']} (overall={winner['overall']})",
     ]
     return {

@@ -11,11 +11,12 @@ Design principles applied:
 from __future__ import annotations
 
 import time
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from vidmcp.config import get_settings
 from vidmcp.core.workspace import Workspace
-from vidmcp.harness.contracts import Phase, build_harness_plan
+from vidmcp.harness.contracts import build_harness_plan
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.fast_harness")
@@ -38,12 +39,12 @@ class FastEducationHarness:
         progress: ProgressFn | None = None,
         force_fast: bool = True,
     ) -> dict[str, Any]:
-        from vidmcp.tools import advanced_service as adv
-        from vidmcp.tools import service
         from vidmcp.audio.course import compile_lesson
         from vidmcp.audio.media import ensure_video_with_narration
         from vidmcp.critics.ensemble import run_critic_ensemble
         from vidmcp.harness.quality_gates import evaluate_gates
+        from vidmcp.tools import advanced_service as adv
+        from vidmcp.tools import service
 
         t0 = time.perf_counter()
         plan = build_harness_plan(intent, product="education", fast=force_fast or self.settings.harness_fast_mode)

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Literal
 from uuid import uuid4
 
+from vidmcp.scenes.blender_backend import blender_available, render_blender_scene
 from vidmcp.scenes.manim_backend import (
     build_manim_source_from_prompt,
     inject_user_construct,
@@ -14,7 +15,6 @@ from vidmcp.scenes.manim_backend import (
     render_manim,
 )
 from vidmcp.scenes.procedural_backend import render_procedural_math_scene
-from vidmcp.scenes.blender_backend import blender_available, render_blender_scene
 from vidmcp.scenes.sandbox import ensure_safe_prompt_slug, validate_scene_source
 from vidmcp.utils.logging import get_logger
 

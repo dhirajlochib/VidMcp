@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-import json
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -39,7 +38,7 @@ def build_manifest(project: ProjectStore) -> dict[str, Any]:
         "vidmcp_version": "0.4.0",
         "project_id": m.id,
         "project_name": m.name,
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
         "source": m.source_video,
         "source_sha256": _file_sha256(project.abs(m.source_video)) if m.source_video else None,
         "primary_segment": m.primary_segment_id,

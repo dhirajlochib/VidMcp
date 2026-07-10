@@ -8,7 +8,6 @@ from __future__ import annotations
 import math
 import re
 from pathlib import Path
-from typing import Any
 
 import cv2
 import numpy as np

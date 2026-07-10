@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from vidmcp.agents.critic import CriticAgent
 from vidmcp.agents.planner import PlannerAgent
 from vidmcp.core.events import Event, get_event_bus
-from vidmcp.core.workspace import ProjectStore, Workspace
+from vidmcp.core.workspace import Workspace
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.orchestrator")

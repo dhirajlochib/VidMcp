@@ -7,8 +7,8 @@ from pathlib import Path
 
 from vidmcp.config import SamBackend, Settings, get_settings
 from vidmcp.perception.base import PerceptionBackend
-from vidmcp.perception.mock_backend import MockPerceptionBackend
 from vidmcp.perception.mlx_backend import MLXSam31Backend
+from vidmcp.perception.mock_backend import MockPerceptionBackend
 from vidmcp.perception.official_backend import OfficialSam3Backend
 from vidmcp.perception.ultralytics_backend import UltralyticsSam3Backend
 from vidmcp.perception.weights import resolve_sam_weights

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import ast
 import re
-from typing import Iterable
 
 # Deny dangerous constructs in untrusted agent code
 _FORBIDDEN_CALLS = {

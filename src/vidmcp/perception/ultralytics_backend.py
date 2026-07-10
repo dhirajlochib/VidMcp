@@ -9,7 +9,12 @@ import cv2
 import numpy as np
 
 from vidmcp.perception.base import ObjectTrack, PerceptionBackend, ProgressFn, SegmentationResult
-from vidmcp.perception.mask_ops import coverage_mean, feather_mask, temporal_stability_score, to_u8_mask
+from vidmcp.perception.mask_ops import (
+    coverage_mean,
+    feather_mask,
+    temporal_stability_score,
+    to_u8_mask,
+)
 from vidmcp.utils.logging import get_logger
 from vidmcp.utils.video_io import probe_video, write_mask_sequence
 
@@ -72,7 +77,6 @@ class UltralyticsSam3Backend(PerceptionBackend):
 
         # Prefer video semantic predictor when present; else frame-wise with tracking note
         try:
-            from ultralytics.models.sam import SAM3VideoSemanticPredictor  # type: ignore
 
             return self._segment_video_native(
                 video_path, prompt, output_dir=output_dir, conf=conf, progress=progress, feather=feather, meta=meta

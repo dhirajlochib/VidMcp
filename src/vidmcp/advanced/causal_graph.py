@@ -9,8 +9,7 @@ Every mutation is a node keyed by hash(parent + op + args). Agents can:
 from __future__ import annotations
 
 import hashlib
-import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -21,7 +20,7 @@ from pydantic import BaseModel, Field
 
 
 def _utcnow() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def content_hash(payload: dict[str, Any]) -> str:
@@ -188,7 +187,7 @@ class CausalGraph(BaseModel):
             path.write_bytes(orjson.dumps(self.model_dump(mode="json"), option=orjson.OPT_INDENT_2))
 
     @classmethod
-    def load(cls, path: Path, project_id: str) -> "CausalGraph":
+    def load(cls, path: Path, project_id: str) -> CausalGraph:
         path = Path(path)
         if not path.exists():
             g = cls(project_id=project_id)

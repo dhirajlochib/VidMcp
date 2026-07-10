@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 
 def register_advanced_tools(
@@ -647,7 +648,6 @@ def register_advanced_tools(
         This is the kitchen-sink advanced path demonstrating the entire stack.
         """
         try:
-            from vidmcp.harness.runtime import HarnessRuntime
 
             ws = workspace_factory()
             settings = get_settings()

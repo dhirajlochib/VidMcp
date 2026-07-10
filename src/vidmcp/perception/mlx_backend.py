@@ -58,9 +58,9 @@ class MLXSam31Backend(PerceptionBackend):
         if self._predictor is not None:
             return self._predictor
         import mlx.core as mx
-        from mlx_vlm.utils import load_model, get_model_path
         from mlx_vlm.models.sam3.generate import Sam3Predictor
         from mlx_vlm.models.sam3_1.processing_sam3_1 import Sam31Processor
+        from mlx_vlm.utils import get_model_path, load_model
 
         log.info("mlx_sam_loading", model=self.model_id)
         mp = get_model_path(self.model_id)
@@ -115,15 +115,15 @@ class MLXSam31Backend(PerceptionBackend):
         max_frames: int | None = None,
         **kwargs: Any,
     ) -> SegmentationResult:
-        from PIL import Image
         import mlx.core as mx
         from mlx_vlm.generate import wired_limit
         from mlx_vlm.models.sam3.generate import DetectionResult
         from mlx_vlm.models.sam3_1.generate import (
             SimpleTracker,
-            _get_backbone_features,
             _detect_with_backbone,
+            _get_backbone_features,
         )
+        from PIL import Image
 
         video_path = Path(video_path)
         output_dir = Path(output_dir)

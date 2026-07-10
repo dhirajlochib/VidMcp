@@ -8,9 +8,8 @@ import subprocess
 import sys
 import textwrap
 from pathlib import Path
-from typing import Any
 
-from vidmcp.scenes.sandbox import SandboxError, validate_scene_source
+from vidmcp.scenes.sandbox import validate_scene_source
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.scenes.manim")

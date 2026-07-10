@@ -9,8 +9,9 @@ API surface follows facebookresearch/sam3:
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import cv2
 import numpy as np
@@ -21,7 +22,6 @@ from vidmcp.perception.mask_ops import (
     feather_mask,
     temporal_stability_score,
     to_u8_mask,
-    union_masks,
 )
 from vidmcp.utils.logging import get_logger
 from vidmcp.utils.video_io import probe_video, write_mask_sequence
@@ -375,7 +375,9 @@ class OfficialSam3Backend(PerceptionBackend):
 
         # 1) free function pattern from community: propagate_in_video(predictor, session_id)
         try:
-            from sam3.model.sam3_video_predictor import propagate_in_video as prop_fn  # type: ignore
+            from sam3.model.sam3_video_predictor import (
+                propagate_in_video as prop_fn,  # type: ignore
+            )
         except Exception:
             try:
                 from sam3 import propagate_in_video as prop_fn  # type: ignore

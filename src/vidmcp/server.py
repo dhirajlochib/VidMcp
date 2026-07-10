@@ -13,12 +13,12 @@ except ImportError:  # pragma: no cover
 from vidmcp import __version__
 from vidmcp.agents.orchestrator import PipelineOrchestrator
 from vidmcp.agents.planner import PlannerAgent
-from vidmcp.harness.runtime import HarnessRuntime
-from vidmcp.harness.quality_gates import evaluate_gates
 from vidmcp.config import get_settings
 from vidmcp.core.job_manager import get_job_manager
 from vidmcp.core.workspace import Workspace
 from vidmcp.effects.registry import get_effect_registry
+from vidmcp.harness.quality_gates import evaluate_gates
+from vidmcp.harness.runtime import HarnessRuntime
 from vidmcp.models.jobs import JobType
 from vidmcp.models.schemas import (
     AnalyzeVideoResult,
@@ -67,6 +67,11 @@ register_advanced_tools(
     service=service,
     log=log,
 )
+
+# v2.0 tools (matte/understanding/color/camera/audio/graphics/recipes/cognition/delivery)
+from vidmcp.tools.v2_mcp import register_v2_tools  # noqa: E402
+
+register_v2_tools(mcp, load_project=_load, workspace_factory=_ws, log=log)
 
 
 # ---------------------------------------------------------------------------
@@ -639,6 +644,7 @@ def analyze_motion(project_id: str, max_frames: int = 90) -> dict[str, Any]:
 def get_backend_info() -> dict[str, Any]:
     """Report active SAM backend (MLX/official/ultra/mock), multiplex flags, device, harness."""
     import platform
+
     from vidmcp.perception.factory import get_perception_backend
     from vidmcp.perception.mlx_backend import MLXSam31Backend
 

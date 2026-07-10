@@ -50,7 +50,6 @@ def multi_cue_depth(frame: np.ndarray, subject_mask: np.ndarray | None = None) -
 def try_midas_depth(frame: np.ndarray) -> np.ndarray | None:
     """Best-effort monocular depth via transformers if installed."""
     try:
-        import torch
         from PIL import Image
         from transformers import pipeline
 

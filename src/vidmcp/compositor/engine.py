@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Callable
+from collections.abc import Callable
 from uuid import uuid4
 
 import cv2
@@ -28,6 +27,8 @@ class CompositorEngine:
     def __init__(self, project: ProjectStore):
         self.project = project
         self.registry = get_effect_registry()
+        self._realism: dict | None = None
+        self._grain_sigma: float | None = None
 
     def render(
         self,
@@ -71,9 +72,15 @@ class CompositorEngine:
         writer = cv2.VideoWriter(str(tmp_video), fourcc, meta.fps, (w, h))
         total = meta.frame_count if max_frames is None else min(meta.frame_count, max_frames)
 
-        # resolve primary mask dir
+        # resolve primary mask dir — prefer refined alpha track when present
         seg = m.primary_segment()
-        mask_dir = str(self.project.abs(seg.mask_dir)) if seg else None
+        mask_dir = None
+        if seg:
+            alpha_rel = (seg.meta or {}).get("alpha_dir")
+            mask_dir = str(self.project.abs(alpha_rel or seg.mask_dir))
+        # realism options set via composite tools (light wrap / spill / shadow / grain)
+        self._realism = (m.source_meta or {}).get("composite_realism") or None
+        self._grain_sigma: float | None = None
 
         for idx, frame in iter_frames(source):
             if max_frames is not None and idx >= max_frames:
@@ -186,6 +193,13 @@ class CompositorEngine:
         source_frame: np.ndarray,
         subject_mask: np.ndarray,
     ) -> np.ndarray:
+        # optional time window on any layer (meta.t_start / meta.t_end, seconds)
+        lm = layer.meta or {}
+        if lm.get("t_start") is not None and ctx.timestamp < float(lm["t_start"]):
+            return canvas
+        if lm.get("t_end") is not None and ctx.timestamp > float(lm["t_end"]):
+            return canvas
+
         if layer.kind == LayerKind.SOURCE:
             return source_frame.copy() if canvas.max() == 0 else over(canvas, source_frame, np.full(subject_mask.shape, 255, np.uint8), layer.opacity)
 
@@ -198,7 +212,18 @@ class CompositorEngine:
             return over(canvas if canvas.max() else bg, bg, inv, layer.opacity)
 
         if layer.kind == LayerKind.SUBJECT:
-            # subject cutout from source
+            # subject cutout from source — realism path when enabled and BG present
+            if self._realism and canvas.max() > 0:
+                from vidmcp.compositor.realism import (
+                    composite_subject_realistic,
+                    estimate_grain_sigma,
+                )
+
+                if self._grain_sigma is None:
+                    self._grain_sigma = estimate_grain_sigma(source_frame)
+                return composite_subject_realistic(
+                    canvas, source_frame, to_u8_mask(subject_mask), self._realism, self._grain_sigma
+                )
             return over(canvas, source_frame, subject_mask, layer.opacity)
 
         if layer.kind == LayerKind.PARTICLES:
@@ -220,6 +245,11 @@ class CompositorEngine:
 
         if layer.kind in (LayerKind.GRADE, LayerKind.ADJUSTMENT, LayerKind.OVERLAY):
             graded = self._render_effect_or_asset(layer, ctx)
+            # BGRA output (graphics overlays) → straight alpha composite onto canvas
+            if graded.ndim == 3 and graded.shape[2] == 4:
+                a = (graded[:, :, 3].astype(np.float32) / 255.0 * layer.opacity)[..., None]
+                rgb = graded[:, :, :3].astype(np.float32)
+                return np.clip(canvas.astype(np.float32) * (1 - a) + rgb * a, 0, 255).astype(np.uint8)
             # optional: grade only background
             selective = bool(layer.effect and layer.effect.params.get("background_only", False))
             if selective:

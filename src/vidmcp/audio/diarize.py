@@ -87,8 +87,9 @@ def diarize_video(
 
     # try pyannote
     try:
-        from pyannote.audio import Pipeline
         import os
+
+        from pyannote.audio import Pipeline
 
         token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
         pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=token)

@@ -24,6 +24,21 @@ class EffectRegistry:
         self.register(GenerativePlaceholderEffect())
         self.register(ParticleSystemEffect())
         self.register(ColorGradeEffect())
+        # v2 color science effects (lazy imports keep startup light)
+        from vidmcp.color.auto_correct import AutoColorEffect
+        from vidmcp.color.grade import GradeV2Effect
+        from vidmcp.color.lut import LutEffect
+        from vidmcp.color.match import ColorMatchEffect
+
+        self.register(LutEffect())
+        self.register(AutoColorEffect())
+        self.register(ColorMatchEffect())
+        self.register(GradeV2Effect())
+        from vidmcp.effects.style import StyleLookEffect
+        from vidmcp.graphics.engine import GraphicsOverlayEffect
+
+        self.register(StyleLookEffect())
+        self.register(GraphicsOverlayEffect())
         # aliases
         self._effects["neon_dust"] = self._effects["particles"]
         self._effects["sparks"] = self._effects["particles"]

@@ -8,7 +8,6 @@ from typing import Any
 import cv2
 import numpy as np
 
-from vidmcp.scenes.procedural_backend import render_procedural_math_scene
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.speech_lock")

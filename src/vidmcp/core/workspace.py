@@ -11,7 +11,12 @@ import orjson
 from filelock import FileLock
 
 from vidmcp.config import Settings, get_settings
-from vidmcp.core.security import SecurityError, assert_video_extension, resolve_under, validate_project_name
+from vidmcp.core.security import (
+    SecurityError,
+    assert_video_extension,
+    resolve_under,
+    validate_project_name,
+)
 from vidmcp.models.project import ProjectManifest, ProjectStatus
 from vidmcp.utils.logging import get_logger
 

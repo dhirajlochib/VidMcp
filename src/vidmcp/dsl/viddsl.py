@@ -173,9 +173,9 @@ def run_viddsl(
                     project.abs(seg.mask_dir), out_dir=project.previews_dir / "uncertainty"
                 )
         elif op.op == "variants":
-            from vidmcp.harness.runtime import HarnessRuntime
-            from vidmcp.core.workspace import Workspace
             from vidmcp.config import get_settings
+            from vidmcp.core.workspace import Workspace
+            from vidmcp.harness.runtime import HarnessRuntime
 
             rt = HarnessRuntime(Workspace(get_settings()), get_settings())
             r["result"] = rt.generate_variants(

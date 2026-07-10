@@ -5,8 +5,7 @@ Can be imported by tools that speak OTIO JSON, or converted when opentimelineio 
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import UTC, datetime
 from typing import Any
 
 import orjson
@@ -69,7 +68,7 @@ def export_timeline_json(project: ProjectStore, *, shots: list[dict[str, Any]] |
         "name": m.name,
         "metadata": {
             "vidmcp_project_id": m.id,
-            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "exported_at": datetime.now(UTC).isoformat(),
             "fps": fps,
             "primary_segment": m.primary_segment_id,
         },

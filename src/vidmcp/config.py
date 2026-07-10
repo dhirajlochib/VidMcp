@@ -66,6 +66,15 @@ class Settings(BaseSettings):
     compact: bool = True
     max_result_chars: int = 4000
     matte_quality: Literal["preview", "final"] = "preview"
+    # v2.0 — proxy pipeline / cognition / quality gates (see UPGRADE_ROADMAP.md)
+    proxy_max_side: int = 540
+    max_repair_passes: int = 2
+    max_edge_flicker_dtssd: float = 0.05
+    max_color_cast_delta_e: float = 8.0
+    max_skin_delta_e: float = 5.0
+    lufs_tolerance: float = 1.5
+    max_true_peak_db: float = -0.7
+    default_brand_kit: str = "default"
 
     @field_validator("workspace_root", "sam_weights", mode="before")
     @classmethod

@@ -26,7 +26,7 @@ class IdentitySignature:
     area_ratio: float
     shot_ids: list[str] = field(default_factory=list)
 
-    def distance(self, other: "IdentitySignature") -> float:
+    def distance(self, other: IdentitySignature) -> float:
         h1 = self.color_hist.astype(np.float32) + 1e-6
         h2 = other.color_hist.astype(np.float32) + 1e-6
         h1 = h1 / h1.sum()

@@ -305,7 +305,7 @@ def failures(workspace: Workspace) -> dict[str, Any]:
 
 
 def word_timeline(project: ProjectStore, fallback_transcript: str | None = None, model_size: str = "base") -> dict[str, Any]:
-    from vidmcp.audio.whisper_timeline import transcribe_words, words_to_keyword_events
+    from vidmcp.audio.whisper_timeline import transcribe_words
 
     if not project.manifest.source_video:
         return {"ok": False, "message": "No source video"}
@@ -331,10 +331,10 @@ def speech_locked_scene(
     place_as_background: bool = True,
     fallback_transcript: str | None = None,
 ) -> dict[str, Any]:
+
     from vidmcp.audio.speech_lock import plan_speech_locked_steps, render_speech_locked_scene
-    from vidmcp.audio.whisper_timeline import transcribe_words, words_to_keyword_events
+    from vidmcp.audio.whisper_timeline import words_to_keyword_events
     from vidmcp.models.layers import Layer, LayerKind
-    import shutil
 
     words_info = word_timeline(project, fallback_transcript=fallback_transcript)
     words = words_info.get("words") or []
@@ -459,10 +459,10 @@ def export_otio(project: ProjectStore) -> dict[str, Any]:
 
 
 def apply_auto_heuristics(project: ProjectStore, service_module, max_frames: int | None = None) -> dict[str, Any]:
+    import vidmcp.tools.advanced_service as adv_mod
     from vidmcp.config import get_settings
     from vidmcp.core.workspace import Workspace
     from vidmcp.harness.auto_heuristics import apply_heuristics_to_project
-    import vidmcp.tools.advanced_service as adv_mod
 
     return apply_heuristics_to_project(
         project,
@@ -503,8 +503,8 @@ def health() -> dict[str, Any]:
 
 def attach_narration(project: ProjectStore, narration: str, force: bool = True) -> dict[str, Any]:
     """Mux TTS narration onto project source (for silent uploads)."""
+
     from vidmcp.audio.media import ensure_video_with_narration
-    import shutil
 
     if not project.manifest.source_video:
         return {"ok": False, "message": "No source"}
@@ -567,9 +567,10 @@ def diarize_project(project: ProjectStore, n_speakers: int = 2) -> dict[str, Any
 
 
 def meshy_plate(project: ProjectStore, prompt: str, place_as_background: bool = True, duration_sec: float = 4.0) -> dict[str, Any]:
+    import shutil
+
     from vidmcp.integrations.meshy import text_to_3d_plate
     from vidmcp.models.layers import Layer, LayerKind
-    import shutil
 
     w, h, fps = 1280, 720, 24.0
     if project.manifest.source_video:
@@ -611,8 +612,8 @@ def remotion_scaffold(project: ProjectStore, prompt: str) -> dict[str, Any]:
 
 
 def marketplace_list(workspace_root: Path | None = None) -> dict[str, Any]:
-    from vidmcp.marketplace.registry import RecipeMarketplace
     from vidmcp.config import get_settings
+    from vidmcp.marketplace.registry import RecipeMarketplace
 
     root = Path(workspace_root or get_settings().workspace_root)
     mp = RecipeMarketplace(root)
@@ -620,22 +621,22 @@ def marketplace_list(workspace_root: Path | None = None) -> dict[str, Any]:
 
 
 def marketplace_publish(recipe: dict[str, Any], author: str = "local") -> dict[str, Any]:
-    from vidmcp.marketplace.registry import RecipeMarketplace
     from vidmcp.config import get_settings
+    from vidmcp.marketplace.registry import RecipeMarketplace
 
     return RecipeMarketplace(get_settings().workspace_root).publish(recipe, author=author)
 
 
 def marketplace_install(path: str) -> dict[str, Any]:
-    from vidmcp.marketplace.registry import RecipeMarketplace
     from vidmcp.config import get_settings
+    from vidmcp.marketplace.registry import RecipeMarketplace
 
     return RecipeMarketplace(get_settings().workspace_root).install_from_path(Path(path))
 
 
 def review_ui_start(port: int = 8765) -> dict[str, Any]:
-    from vidmcp.review.app import start_review_server
     from vidmcp.config import get_settings
+    from vidmcp.review.app import start_review_server
 
     return start_review_server(get_settings().workspace_root, port=port)
 

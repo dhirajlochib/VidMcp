@@ -6,7 +6,7 @@ import threading
 from typing import Any
 
 from vidmcp.core.workspace import ProjectStore
-from vidmcp.models.jobs import JobRecord, JobStatus, JobType
+from vidmcp.models.jobs import JobRecord, JobType
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.jobs")

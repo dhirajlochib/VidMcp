@@ -10,7 +10,6 @@ import shutil
 import subprocess
 import textwrap
 from pathlib import Path
-from typing import Any
 
 from vidmcp.utils.logging import get_logger
 

@@ -9,7 +9,6 @@ import cv2
 import numpy as np
 
 from vidmcp.compositor.alpha import load_mask_for_frame, over
-from vidmcp.perception.mask_ops import to_u8_mask
 from vidmcp.utils.video_io import iter_frames, probe_video
 
 

@@ -6,13 +6,13 @@ Supports enqueue of named handlers; worker can run in-process or subprocess.
 
 from __future__ import annotations
 
-import json
 import threading
 import time
 import traceback
-from datetime import datetime, timezone
+from collections.abc import Callable
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 from uuid import uuid4
 
 import orjson
@@ -26,7 +26,7 @@ Handler = Callable[[dict[str, Any]], dict[str, Any]]
 
 
 def _utcnow() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 class JobQueue:
@@ -186,8 +186,8 @@ def get_job_queue(root: Path | None = None) -> JobQueue:
 
 def _register_default_handlers(q: JobQueue) -> None:
     def _composite(payload: dict[str, Any]) -> dict[str, Any]:
-        from vidmcp.core.workspace import Workspace
         from vidmcp.config import get_settings
+        from vidmcp.core.workspace import Workspace
         from vidmcp.tools import service
 
         ws = Workspace(get_settings())
@@ -195,8 +195,8 @@ def _register_default_handlers(q: JobQueue) -> None:
         return service.composite(project, max_frames=payload.get("max_frames"))
 
     def _segment(payload: dict[str, Any]) -> dict[str, Any]:
-        from vidmcp.core.workspace import Workspace
         from vidmcp.config import get_settings
+        from vidmcp.core.workspace import Workspace
         from vidmcp.tools import service
 
         ws = Workspace(get_settings())
@@ -204,10 +204,10 @@ def _register_default_handlers(q: JobQueue) -> None:
         return service.segment(project, prompt=payload.get("prompt") or "person", conf=payload.get("conf"))
 
     def _enhance(payload: dict[str, Any]) -> dict[str, Any]:
-        from vidmcp.core.workspace import Workspace
         from vidmcp.config import get_settings
-        from vidmcp.tools import service
+        from vidmcp.core.workspace import Workspace
         from vidmcp.tools import advanced_service as adv
+        from vidmcp.tools import service
 
         ws = Workspace(get_settings())
         project = ws.load_project(payload["project_id"])

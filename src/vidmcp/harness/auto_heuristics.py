@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
 
-from vidmcp.config import Settings, get_settings
+from vidmcp.config import get_settings
 from vidmcp.core.workspace import ProjectStore, Workspace
-from vidmcp.failure.mine import FailureStore, mine_workspace_failures, suggest_heuristics
+from vidmcp.failure.mine import mine_workspace_failures, suggest_heuristics
 from vidmcp.utils.logging import get_logger
 
 log = get_logger("vidmcp.auto_heuristics")

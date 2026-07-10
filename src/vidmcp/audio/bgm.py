@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import struct
 import subprocess
 import wave
 from pathlib import Path
@@ -105,7 +104,6 @@ def generate_ambient_bgm(
 def _speech_envelope(wav_path: Path, hop_ms: float = 50.0) -> tuple[np.ndarray, int]:
     """Return mono float envelope sampled every hop_ms and sample rate."""
     # load via ffmpeg to 16k mono
-    import tempfile
 
     tmp = wav_path.with_suffix(".env16k.wav")
     subprocess.run(

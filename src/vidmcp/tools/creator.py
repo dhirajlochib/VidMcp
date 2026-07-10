@@ -14,12 +14,10 @@ from vidmcp.audio.whisper_timeline import transcribe_words
 from vidmcp.captions.burn import burn_captions, words_to_cues, write_ass
 from vidmcp.compositor.ffmpeg_ops import mux_audio_replace
 from vidmcp.core.workspace import ProjectStore, Workspace
-from vidmcp.edit.edl import export_edl
 from vidmcp.edit.infographics import burn_infographics, derive_beats_from_transcript
 from vidmcp.edit.smart_cut import apply_smart_cuts, plan_smart_cuts
 from vidmcp.matte.replace_bg import replace_background_video
 from vidmcp.media.export import export_render as export_render_file
-from vidmcp.media.orient import bake_orientation, display_size
 from vidmcp.models.project import ProjectStatus
 from vidmcp.tools.service import analyze, import_source
 from vidmcp.utils.logging import get_logger
@@ -79,7 +77,6 @@ def mix_bgm_project(
         vox = project.abs(vocals)
     else:
         # extract first
-        from vidmcp.audio.media import extract_wav
 
         vox = _audio_dir(project) / "vocals_raw.wav"
         src = project.abs(project.manifest.source_video)
@@ -355,6 +352,7 @@ def generate_thumbnail_project(project: ProjectStore, title: str | None = None) 
         else:
             title = project.manifest.name or "VidMCP"
     from PIL import Image, ImageDraw, ImageFont
+
     from vidmcp.captions.fonts import resolve_font
 
     img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))

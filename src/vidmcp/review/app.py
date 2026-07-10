@@ -7,9 +7,8 @@ No FastAPI required — always available.
 from __future__ import annotations
 
 import html
-import json
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -213,7 +212,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 "project_id": (form.get("project_id") or [""])[0],
                 "decision": (form.get("decision") or [""])[0],
                 "note": (form.get("note") or [""])[0],
-                "ts": datetime.now(timezone.utc).isoformat(),
+                "ts": datetime.now(UTC).isoformat(),
             }
             _STATE["decisions"].append(decision)
             # persist

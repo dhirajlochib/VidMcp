@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from vidmcp.agents.planner import PlannerAgent
 from vidmcp.config import Settings, get_settings
-from vidmcp.core.workspace import ProjectStore, Workspace
+from vidmcp.core.workspace import Workspace
 from vidmcp.harness.edit_graph import EditGraph
 from vidmcp.harness.quality_gates import QualityGateResult, evaluate_gates
 from vidmcp.harness.recipes import get_recipe

@@ -9,7 +9,6 @@ from typing import Any
 from vidmcp.audio.media import extract_wav, has_audio_stream
 from vidmcp.compositor.ffmpeg_ops import measure_loudness
 from vidmcp.utils.logging import get_logger
-from vidmcp.utils.video_io import probe_video
 
 log = get_logger("vidmcp.audio.process")
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 VARIANT_PRESETS: list[dict[str, Any]] = [
     {
         "id": "v_cyberpunk",

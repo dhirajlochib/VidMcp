@@ -5,7 +5,6 @@ Uses librosa when available; otherwise ffmpeg+numpy RMS envelope (always works).
 
 from __future__ import annotations
 
-import json
 import re
 import subprocess
 import wave

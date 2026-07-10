@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+from collections.abc import Iterator
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import cv2
 import numpy as np

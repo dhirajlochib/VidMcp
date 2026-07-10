@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Any
 
 import cv2
-import numpy as np
 import httpx
+import numpy as np
 
 from vidmcp.utils.logging import get_logger
 

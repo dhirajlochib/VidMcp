@@ -62,7 +62,7 @@ class EditGraph(BaseModel):
         return waves
 
     @staticmethod
-    def from_intent_plan(intent: str, steps: list[dict[str, Any]], project_id: str | None = None) -> "EditGraph":
+    def from_intent_plan(intent: str, steps: list[dict[str, Any]], project_id: str | None = None) -> EditGraph:
         g = EditGraph(intent=intent, project_id=project_id)
         prev: str | None = None
         for s in steps:
