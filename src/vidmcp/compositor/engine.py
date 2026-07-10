@@ -129,7 +129,17 @@ class CompositorEngine:
                 check=True,
                 capture_output=True,
             )
-            mux_audio(h264_tmp, source, final_path)
+            # Prefer project audio pipeline (final_mix / vocals_clean) when present
+            audio_src = source
+            pipe = (m.source_meta or {}).get("audio_pipeline") or {}
+            for key in ("mix", "vocals"):
+                rel = pipe.get(key)
+                if rel:
+                    cand = self.project.abs(rel)
+                    if cand.exists():
+                        audio_src = cand
+                        break
+            mux_audio(h264_tmp, audio_src, final_path)
         except Exception as e:  # noqa: BLE001
             log.warning("encode_mux_fallback", error=str(e))
             final_path.write_bytes(tmp_video.read_bytes())

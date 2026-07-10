@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VidMCP — by Dhiraj Lochib</title>
-  <meta name="description" content="VidMCP: MCP server for text-prompt video mattes, behind-the-subject VFX, and education scenes. Built by Dhiraj Lochib." />
+  <title>VidMCP 1.1 — Creator video MCP by Dhiraj Lochib</title>
+  <meta name="description" content="VidMCP 1.1: agent video editing MCP — denoise, BGM, captions, BG replace, portrait-safe export. By Dhiraj Lochib." />
   <meta name="theme-color" content="#050507" />
   <link rel="canonical" href="https://vidmcp.com/" />
-  <meta property="og:title" content="VidMCP — video tools agents can run" />
-  <meta property="og:description" content="Segment. Compose behind the subject. Teach. MCP for Grok & Cursor." />
-  <meta property="og:image" content="https://vidmcp.com/assets/demos/03_behind_subject.jpg" />
+  <meta property="og:title" content="VidMCP 1.1 — video tools agents can run" />
+  <meta property="og:description" content="Orient · denoise · BGM · captions · BG replace · export. MCP for Grok, Cursor, Claude." />
+  <meta property="og:image" content="https://vidmcp.com/assets/demos/07_creator_polish.jpg" />
   <meta property="og:url" content="https://vidmcp.com/" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
@@ -17,6 +17,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VidMCP","applicationCategory":"MultimediaApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Dhiraj Lochib","url":"https://dhirajlochib.com/"},"url":"https://vidmcp.com","softwareVersion":"1.1.0"}
+  </script>
 </head>
 <body>
   <div class="bg-mesh" aria-hidden="true"></div>
@@ -27,8 +30,8 @@
       <a class="logo" href="#top"><i></i> VidMCP</a>
       <nav class="nav-links" id="navlinks">
         <a href="#work">Work</a>
+        <a href="#v11">1.1</a>
         <a href="#product">Product</a>
-        <a href="#flow">Flow</a>
         <a href="#dev">Install</a>
         <a href="#about">About</a>
         <a class="gh" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
@@ -40,178 +43,192 @@
   <div class="page" id="top">
     <section class="hero fade">
       <div>
-        <div class="status"><i></i> Open source · MCP</div>
+        <div class="status"><i></i> v1.1 · Open source · MCP · PyPI</div>
         <h1>Agents don’t describe video. <em>They cut it.</em></h1>
         <p class="hero-sub">
-          <strong>VidMCP</strong> is a production MCP server for text-prompt mattes,
-          behind-the-subject composition, and education plates — built for Grok, Cursor, and any MCP host.
+          <strong>VidMCP</strong> is a production MCP server for talk-head polish, text-prompt mattes,
+          behind-the-subject VFX, and education plates — for Grok, Cursor, Claude, and any MCP host.
         </p>
         <div class="btns">
           <a class="btn btn-primary" href="#work">Watch samples</a>
-          <a class="btn" href="#dev">Install</a>
-          <a class="btn" href="https://dhirajlochib.com/" target="_blank" rel="noopener">dhirajlochib.com</a>
+          <a class="btn" href="#dev">Install 1.1</a>
+          <a class="btn" href="https://pypi.org/project/vidmcp/" target="_blank" rel="noopener">PyPI</a>
         </div>
       </div>
       <div class="hero-stage">
         <div class="stage-frame">
-          <video autoplay muted loop playsinline poster="assets/demos/03_behind_subject.jpg">
-            <source src="assets/demos/03_behind_subject.mp4" type="video/mp4" />
+          <video autoplay muted loop playsinline poster="assets/demos/07_creator_polish.jpg">
+            <source src="assets/demos/07_creator_polish.mp4" type="video/mp4" />
           </video>
-          <div class="chip-live">MATTE · LIVE</div>
+          <div class="chip-live">CREATOR · 1.1</div>
         </div>
+      </div>
+    </section>
+
+    <section class="sec fade" id="v11">
+      <div class="sec-head"><div class="sec-n">00</div><div class="sec-t">New in 1.1</div><div class="sec-l"></div></div>
+      <h2>Creator polish pipeline</h2>
+      <p class="lead">Portrait-safe import, denoise, BGM duck, captions, BG replace, export presets — one MCP call or a short tool chain.</p>
+      <div class="strip" style="flex-wrap:wrap;gap:10px;margin:1.5rem 0">
+        <span class="chip">orient</span>
+        <span class="chip">process_audio</span>
+        <span class="chip">mix_bgm</span>
+        <span class="chip">captions</span>
+        <span class="chip">replace_background</span>
+        <span class="chip">smart_cut</span>
+        <span class="chip">export_render</span>
+      </div>
+      <div class="code-wrap">
+        <div class="code-bar">python <button type="button" data-copy="from vidmcp.tools.creator import run_talking_head_polish
+print(run_talking_head_polish('talk.mov', preset='reels_9x16', bg_mode='space'))">Copy</button></div>
+        <pre><code><span class="fn">from</span> vidmcp.tools.creator <span class="fn">import</span> run_talking_head_polish
+print(run_talking_head_polish(<span class="str">'talk.mov'</span>, preset=<span class="str">'reels_9x16'</span>, bg_mode=<span class="str">'space'</span>))</code></pre>
       </div>
     </section>
 
     <section class="sec fade" id="work">
       <div class="sec-head"><div class="sec-n">01</div><div class="sec-t">Selected work</div><div class="sec-l"></div></div>
-      <h2>Complex plates. Not toy demos.</h2>
-      <p class="lead">Flow fields, glowing tesseracts, depth mattes, kinetic type — click any card to play.</p>
+      <h2>New samples + classic plates</h2>
+      <p class="lead">Click any card to play. Creator 1.1 and real BG-replace demos ship with the site.</p>
       <div class="gallery">
-        <article class="g-card big" data-video="assets/demos/03_behind_subject.mp4" data-title="Behind the subject">
-          <div class="thumb"><img src="assets/demos/03_behind_subject.jpg" alt="Behind subject" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">Core</div><h3>Behind the subject</h3><p>Particles under the matte — the product idea.</p></div>
+        <article class="g-card big" data-video="assets/demos/07_creator_polish.mp4" data-title="Creator 1.1">
+          <div class="thumb"><img src="assets/demos/07_creator_polish.jpg" alt="Creator 1.1" /><div class="play">▶</div></div>
+          <div class="g-meta"><div class="tag">New · 1.1</div><h3>Creator polish</h3><p>Orient · denoise · BGM · captions · export — the product spine.</p></div>
+        </article>
+        <article class="g-card" data-video="assets/demos/08_bg_replace.mp4" data-title="BG replace">
+          <div class="thumb"><img src="assets/demos/08_bg_replace.jpg" alt="BG replace" loading="lazy" /><div class="play">▶</div></div>
+          <div class="g-meta"><div class="tag">New · VFX</div><h3>BG replace</h3><p>Talk-head matte over animated space plate.</p></div>
+        </article>
+        <article class="g-card" data-video="assets/demos/03_behind_subject.mp4" data-title="Behind the subject">
+          <div class="thumb"><img src="assets/demos/03_behind_subject.jpg" alt="Behind subject" loading="lazy" /><div class="play">▶</div></div>
+          <div class="g-meta"><div class="tag">Core</div><h3>Behind the subject</h3><p>Particles under the matte.</p></div>
         </article>
         <article class="g-card" data-video="assets/demos/01_flowfield.mp4" data-title="Flow field">
           <div class="thumb"><img src="assets/demos/01_flowfield.jpg" alt="Flow" loading="lazy" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">Brand</div><h3>Flow field</h3><p>900 particles · curl noise → logo.</p></div>
+          <div class="g-meta"><div class="tag">Brand</div><h3>Flow field</h3><p>Curl noise → logo.</p></div>
         </article>
         <article class="g-card" data-video="assets/demos/02_tesseract.mp4" data-title="Tesseract">
           <div class="thumb"><img src="assets/demos/02_tesseract.jpg" alt="Tesseract" loading="lazy" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">Math</div><h3>Tesseract</h3><p>4D hypercube with motion trails.</p></div>
-        </article>
-        <article class="g-card" data-video="assets/demos/04_kinetic.mp4" data-title="Kinetic">
-          <div class="thumb"><img src="assets/demos/04_kinetic.jpg" alt="Kinetic" loading="lazy" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">Type</div><h3>Kinetic edit</h3><p>Segment · compose · ship.</p></div>
+          <div class="g-meta"><div class="tag">Math</div><h3>Tesseract</h3><p>4D hypercube trails.</p></div>
         </article>
         <article class="g-card" data-video="assets/demos/05_unit_circle.mp4" data-title="Unit circle">
-          <div class="thumb"><img src="assets/demos/05_unit_circle.jpg" alt="Circle" loading="lazy" /><div class="play">▶</div></div>
-          <div class="g-meta"><div class="tag">Edu</div><h3>Unit circle</h3><p>Orbit trail · live sin/cos.</p></div>
+          <div class="thumb"><img src="assets/demos/05_unit_circle.jpg" alt="Unit circle" loading="lazy" /><div class="play">▶</div></div>
+          <div class="g-meta"><div class="tag">Edu</div><h3>Unit circle</h3><p>Live sin / cos plate.</p></div>
         </article>
       </div>
-      <p class="hint" style="margin-top:14px">Also: <a href="#" data-video="assets/demos/06_pipeline.mp4" data-title="Pipeline" style="color:var(--cyan)">agent pipeline</a> · all files in <code style="font-family:JetBrains Mono,monospace;font-size:11px">/assets/demos</code></p>
     </section>
 
     <section class="sec fade" id="product">
       <div class="sec-head"><div class="sec-n">02</div><div class="sec-t">Product</div><div class="sec-l"></div></div>
-      <h2>What the agent actually gets</h2>
-      <p class="lead">Tools over stdio — not a thin FFmpeg wrapper with marketing glitter.</p>
-      <div class="skills-wrap">
-        <div class="sk-card"><div class="sk-head"><div class="sk-icon">◎</div><div class="sk-title">Perception</div></div><h3>Text-prompt matte</h3><p>Segment and track a subject from language. Mock offline; MLX / SAM when you need fidelity.</p></div>
-        <div class="sk-card"><div class="sk-head"><div class="sk-icon">✦</div><div class="sk-title">Composition</div></div><h3>Behind-subject VFX</h3><p>Grades, plates, particles composite under the person — never painted on their face.</p></div>
-        <div class="sk-card"><div class="sk-head"><div class="sk-icon">∑</div><div class="sk-title">Education</div></div><h3>Speech-locked scenes</h3><p>Math plates and narration hooks for lessons that hold structure.</p></div>
-        <div class="sk-card"><div class="sk-head"><div class="sk-icon">⌘</div><div class="sk-title">System</div></div><h3>Agent harness</h3><p>Plan → perceive → compose → critic. Quality gates instead of one-shot hope.</p></div>
+      <h2>Built for agents, not dashboards</h2>
+      <div class="grid3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:1.5rem">
+        <article class="card-soft">
+          <div class="tag">Audio</div>
+          <h3>Denoise + BGM</h3>
+          <p>afftdn · compressor · loudnorm. Ambient pad ducked under speech so laptop speakers still hear music.</p>
+        </article>
+        <article class="card-soft">
+          <div class="tag">Orient</div>
+          <h3>Portrait-safe</h3>
+          <p>Phone rotation (−90°) baked on import. Export 9:16 / 16:9 / 1:1 without stretch.</p>
+        </article>
+        <article class="card-soft">
+          <div class="tag">Matte</div>
+          <h3>Behind subject</h3>
+          <p>SAM / MLX / MediaPipe cutouts. Effects and plates composite under the person.</p>
+        </article>
+        <article class="card-soft">
+          <div class="tag">Captions</div>
+          <h3>Speech burn-in</h3>
+          <p>Whisper word timelines + brand ASS styles. Infographic cards from keywords.</p>
+        </article>
+        <article class="card-soft">
+          <div class="tag">Edit</div>
+          <h3>Smart cuts</h3>
+          <p>Drop dead air and long fillers (um, basically…) from the transcript.</p>
+        </article>
+        <article class="card-soft">
+          <div class="tag">MCP</div>
+          <h3>~89 tools</h3>
+          <p>Projects, recipes, harness gates, education lessons — pack-aware for agents.</p>
+        </article>
       </div>
     </section>
 
     <section class="sec fade" id="flow">
       <div class="sec-head"><div class="sec-n">03</div><div class="sec-t">Flow</div><div class="sec-l"></div></div>
-      <h2>Four moves. In order.</h2>
-      <p class="lead">A sequence an agent can run end-to-end.</p>
-      <div class="tl">
-        <div class="tl-row"><div class="tl-date">T0</div><div class="tl-card"><h3>Connect</h3><p>Point Grok or Cursor at the VidMCP binary.</p></div></div>
-        <div class="tl-row"><div class="tl-date">T1</div><div class="tl-card"><h3>Segment</h3><p>Name the subject. Get a tracked alpha matte.</p></div></div>
-        <div class="tl-row"><div class="tl-date">T2</div><div class="tl-card"><h3>Layer</h3><p>Build the world behind them — not on top.</p></div></div>
-        <div class="tl-row"><div class="tl-date">T3</div><div class="tl-card"><h3>Render</h3><p>Composite, review, iterate with the harness.</p></div></div>
-      </div>
+      <h2>From import to export</h2>
+      <ol class="flow-list" style="margin:1.5rem 0;padding-left:1.2rem;line-height:1.9;color:var(--muted,#a0a5af)">
+        <li><strong style="color:#efefeb">import_video</strong> — bake orientation</li>
+        <li><strong style="color:#efefeb">process_audio</strong> + <strong style="color:#efefeb">mix_bgm</strong></li>
+        <li><strong style="color:#efefeb">replace_background</strong> or segment + effects</li>
+        <li><strong style="color:#efefeb">transcribe_and_caption</strong></li>
+        <li><strong style="color:#efefeb">export_render</strong> — reels / youtube / square</li>
+      </ol>
     </section>
 
     <section class="sec fade" id="dev">
       <div class="sec-head"><div class="sec-n">04</div><div class="sec-t">Install</div><div class="sec-l"></div></div>
-      <h2>Running in under a minute</h2>
-      <p class="lead">Start on mock (no GPU). Flip to MLX on Apple Silicon for real mattes.</p>
-      <div class="dev-grid">
-        <div class="code">
-          <div class="code-bar">shell <button type="button" data-copy="uv tool install vidmcp && vidmcp --doctor">Copy</button></div>
-          <pre><span class="cm"># recommended</span>
-<span class="fn">uv tool install</span> vidmcp
-<span class="fn">vidmcp</span> --doctor
-
-<span class="cm"># or one-shot</span>
-<span class="fn">uvx</span> vidmcp</pre>
-        </div>
-        <div class="code">
-          <div class="code-bar">MCP Server Config</div>
-          <pre>{
-  <span class="st">"mcpServers"</span>: {
-    <span class="st">"vidmcp"</span>: {
-      <span class="st">"command"</span>: <span class="st">"uvx"</span>,
-      <span class="st">"args"</span>: [<span class="st">"vidmcp"</span>],
-      <span class="st">"env"</span>: {
-        <span class="st">"VIDMCP_SAM_BACKEND"</span>: <span class="st">"mock"</span>
-      }
-    }
-  }
-}</pre>
-        </div>
+      <h2>Ship in one line</h2>
+      <div class="code-wrap">
+        <div class="code-bar">shell <button type="button" data-copy="uv tool install 'vidmcp>=1.1.0'
+vidmcp --doctor">Copy</button></div>
+        <pre><code><span class="fn">uv tool install</span> <span class="str">'vidmcp&gt;=1.1.0'</span>
+vidmcp --doctor</code></pre>
       </div>
-      <div class="btns" style="margin-top:18px">
-        <a class="btn btn-primary" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">Open GitHub</a>
+      <div class="code-wrap" style="margin-top:1rem">
+        <div class="code-bar">shell extras <button type="button" data-copy="pip install 'vidmcp[creator]'">Copy</button></div>
+        <pre><code>pip install <span class="str">'vidmcp[creator]'</span>  <span class="cmt"># Whisper + MediaPipe</span></code></pre>
+      </div>
+      <p class="lead" style="margin-top:1.25rem">MCP: point your host at <code>uvx vidmcp</code> with <code>VIDMCP_SAM_BACKEND=mock</code> for offline demos.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://pypi.org/project/vidmcp/" target="_blank" rel="noopener">PyPI 1.1</a>
       </div>
     </section>
 
     <section class="sec fade" id="about">
       <div class="sec-head"><div class="sec-n">05</div><div class="sec-t">About</div><div class="sec-l"></div></div>
-      <div class="split">
-        <div class="card">
-          <div class="who">
-            <div class="avatar-ring"><div class="avatar-ring-inner">DL</div></div>
-            <div>
-              <h3>Dhiraj Lochib</h3>
-              <span>Full-Stack · Blockchain · AI · VidMCP</span>
-            </div>
-          </div>
-          <p class="prose">
-            Building where agents stop describing media and start producing it.
-            Also: fintech, smart contracts, and AI products —
-            <a href="https://dhirajlochib.com/" style="color:var(--cyan)" target="_blank" rel="noopener">dhirajlochib.com</a>
-          </p>
-          <div class="btns">
-            <a class="btn" href="https://github.com/dhirajlochib" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn" href="https://www.linkedin.com/in/dhirajlochib-dev/" target="_blank" rel="noopener">LinkedIn</a>
-            <a class="btn" href="mailto:dhirajch145@gmail.com">Email</a>
-          </div>
-        </div>
-        <div class="card" id="contact">
-          <h3 style="font-family:'Crimson Pro',serif;font-size:24px;margin-bottom:14px">Contact</h3>
-          <form class="form" id="contact-form" data-to="dhirajch145@gmail.com">
-            <label>Name <input name="name" required placeholder="Your name" autocomplete="name" /></label>
-            <label>Email <input name="email" type="email" required placeholder="you@company.com" autocomplete="email" /></label>
-            <label>Message <textarea name="message" required placeholder="What are you building?"></textarea></label>
-            <button class="btn btn-primary" type="submit" style="justify-content:center">Send message</button>
-            <p class="hint" id="form-status">Opens mail to dhirajch145@gmail.com</p>
-          </form>
-        </div>
+      <h2>Dhiraj Lochib</h2>
+      <p class="lead">Full-stack, blockchain, AI. VidMCP is open MIT — agents that cut video, not just describe it.</p>
+      <div class="btns">
+        <a class="btn" href="https://dhirajlochib.com/" target="_blank" rel="noopener">dhirajlochib.com</a>
+        <a class="btn" href="https://github.com/dhirajlochib" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="mailto:dhirajch145@gmail.com">Email</a>
       </div>
     </section>
 
-    <div class="finale fade">
-      <div class="status" style="margin:0 auto 8px"><i></i> MIT</div>
-      <h2>Clone it. Wire Grok. Cut something.</h2>
-      <p>Mock backend for first run. Real SAM when you’re ready.</p>
-      <div class="btns" style="justify-content:center">
-        <a class="btn btn-primary" href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">Star on GitHub</a>
-        <a class="btn" href="#work">Replay samples</a>
-      </div>
-    </div>
+    <section class="sec fade" id="contact">
+      <div class="sec-head"><div class="sec-n">06</div><div class="sec-t">Contact</div><div class="sec-l"></div></div>
+      <h2>Build with us</h2>
+      <form id="contact-form" data-to="dhirajch145@gmail.com">
+        <label>Name <input name="name" required autocomplete="name" /></label>
+        <label>Email <input name="email" type="email" required autocomplete="email" /></label>
+        <label>Message <textarea name="message" required rows="4"></textarea></label>
+        <button class="btn btn-primary" type="submit">Send</button>
+        <p id="form-status" class="muted"></p>
+      </form>
+    </section>
 
     <footer class="foot">
-      <div class="foot-t">VidMCP · Dhiraj Lochib · 2026</div>
+      <div>© <span id="y"></span> Dhiraj Lochib · VidMCP 1.1 · MIT</div>
       <div class="foot-links">
         <a href="https://vidmcp.com">vidmcp.com</a>
-        <a href="https://dhirajlochib.com/" target="_blank" rel="noopener">dhirajlochib.com</a>
-        <a href="https://github.com/dhirajlochib/VidMcp" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:dhirajch145@gmail.com">Email</a>
+        <a href="https://github.com/dhirajlochib/VidMcp">GitHub</a>
+        <a href="https://pypi.org/project/vidmcp/">PyPI</a>
       </div>
-      <div class="foot-bar"></div>
     </footer>
   </div>
 
   <div class="modal" id="modal" role="dialog" aria-modal="true">
-    <div class="modal-box">
-      <div class="modal-top"><span id="modal-title">Preview</span><button type="button" id="modal-close">Close</button></div>
+    <div class="modal-card">
+      <button type="button" id="modal-close" class="btn">Close</button>
+      <h3 id="modal-title">Preview</h3>
       <video id="modal-video" controls playsinline></video>
     </div>
   </div>
+
   <script src="js/main.js"></script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear()</script>
 </body>
 </html>

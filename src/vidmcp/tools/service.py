@@ -19,9 +19,53 @@ log = get_logger("vidmcp.service")
 ProgressFn = Callable[[float, str], None]
 
 
-def import_source(project: ProjectStore, video_path: str | Path) -> str:
+def import_source(
+    project: ProjectStore,
+    video_path: str | Path,
+    *,
+    bake_orientation: bool = True,
+) -> str:
+    """Import video; optionally bake displaymatrix rotation so frames are upright."""
+    from vidmcp.media.orient import bake_orientation as bake_orient
+    from vidmcp.media.orient import display_size
+    from vidmcp.utils.video_io import probe_video
+
     settings = get_settings()
     dest = project.import_video(video_path, copy=settings.import_copy_into_workspace)
+    meta = probe_video(dest)
+    dw, dh = display_size(meta)
+    project.manifest.source_meta = {
+        **(project.manifest.source_meta or {}),
+        "width": meta.width,
+        "height": meta.height,
+        "display_width": dw,
+        "display_height": dh,
+        "fps": meta.fps,
+        "frame_count": meta.frame_count,
+        "duration_sec": meta.duration_sec,
+        "codec": meta.codec,
+        "has_audio": meta.has_audio,
+        "rotation": meta.rotation,
+        "rotation_original": meta.rotation,
+        "oriented": False,
+    }
+    if bake_orientation and int(meta.rotation or 0) % 360 != 0:
+        oriented = project.source_dir / "source_oriented.mp4"
+        info = bake_orient(dest, oriented)
+        project.manifest.source_video = project.rel(oriented)
+        project.manifest.source_meta.update(
+            {
+                "width": info.get("output_width"),
+                "height": info.get("output_height"),
+                "display_width": info.get("output_width"),
+                "display_height": info.get("output_height"),
+                "oriented": True,
+                "rotation": 0,
+            }
+        )
+        project.manifest.append_history("bake_orientation", info)
+        dest = oriented
+    project.save()
     return project.rel(dest)
 
 

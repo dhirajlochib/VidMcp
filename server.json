@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.dhirajlochib/VidMcp",
   "description": "AI video editing MCP by Dhiraj Lochib (vidmcp.com) \u2014 SAM 3.1, behind-the-subject VFX, education scenes.",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "status": "active",
   "repository": {
     "url": "https://github.com/dhirajlochib/VidMcp",
@@ -12,7 +12,7 @@
     {
       "registryType": "pypi",
       "identifier": "vidmcp",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "transport": {
         "type": "stdio"
       },

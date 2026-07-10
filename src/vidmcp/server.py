@@ -102,11 +102,28 @@ def get_project(project_id: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-def import_video(project_id: str, video_path: str) -> dict[str, Any]:
-    """Import (copy) a video into the project source folder."""
+def import_video(
+    project_id: str,
+    video_path: str,
+    bake_orientation: bool = True,
+) -> dict[str, Any]:
+    """Import (copy) a video into the project source folder.
+
+    bake_orientation: when True (default), bake displaymatrix rotation so portrait
+    phone clips are upright for all downstream tools.
+    """
     store = _load(project_id)
-    rel = service.import_source(store, video_path)
-    return {"ok": True, "project_id": project_id, "source_video": rel}
+    rel = service.import_source(store, video_path, bake_orientation=bake_orientation)
+    meta = store.manifest.source_meta or {}
+    return {
+        "ok": True,
+        "project_id": project_id,
+        "source_video": rel,
+        "oriented": meta.get("oriented"),
+        "rotation_original": meta.get("rotation_original"),
+        "width": meta.get("width"),
+        "height": meta.get("height"),
+    }
 
 
 @mcp.tool()

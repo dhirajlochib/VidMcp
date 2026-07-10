@@ -199,6 +199,18 @@ class HarnessRuntime:
         from vidmcp.tools import service
 
         recipe = get_recipe(recipe_name)
+        # Creator polish path (audio/captions/BG/export) — fully productized
+        if recipe.get("creator_pipeline"):
+            from vidmcp.tools.creator import run_talking_head_polish
+
+            return run_talking_head_polish(
+                video_path,
+                workspace=self.workspace,
+                name=project_name or recipe["name"],
+                preset=str(recipe.get("preset") or "youtube_16x9"),
+                bg_mode=str(recipe.get("bg_mode") or "none"),
+            )
+
         project = self.workspace.create_project(name=project_name or recipe["name"])
         tel = TelemetryRun(project.manifest.id, kind=f"recipe:{recipe_name}")
 
@@ -207,7 +219,7 @@ class HarnessRuntime:
                 progress(p, msg)
 
         report(0.05, "import+analyze")
-        service.import_source(project, video_path)
+        service.import_source(project, video_path, bake_orientation=True)
         analysis = service.analyze(project)
 
         prompts = recipe.get("multi_prompts") or [recipe.get("subject_prompt", "person")]

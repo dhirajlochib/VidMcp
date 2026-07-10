@@ -6,6 +6,19 @@ from typing import Any
 
 
 RECIPES: dict[str, dict[str, Any]] = {
+    "talking_head_polish": {
+        "name": "talking_head_polish",
+        "description": "Creator polish: orient, denoise, BGM, captions, optional BG replace, export",
+        "subject_prompt": "person",
+        "creator_pipeline": True,
+        "bg_mode": "none",
+        "preset": "youtube_16x9",
+        "process_audio": True,
+        "mix_bgm": True,
+        "captions": True,
+        "conf": 0.25,
+        "max_passes": 1,
+    },
     "talking_head_math": {
         "name": "talking_head_math",
         "description": "Talking-head over animated math/education plate (Manim or procedural)",

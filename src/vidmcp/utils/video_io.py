@@ -33,6 +33,17 @@ class VideoMeta:
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
+    @property
+    def display_width(self) -> int:
+        from vidmcp.media.orient import display_size
+        return display_size(self)[0]
+
+    @property
+    def display_height(self) -> int:
+        from vidmcp.media.orient import display_size
+        return display_size(self)[1]
+
+
 
 def _run_ffprobe(path: Path) -> dict[str, Any]:
     cmd = [

@@ -114,25 +114,38 @@ class CyberpunkBackgroundEffect(Effect):
 
 
 class GenerativePlaceholderEffect(Effect):
-    """Hook for diffusion / video models — currently procedural noise plate + prompt hash color."""
+    """Procedural plate from prompt hash — intentional animated gradient (API-optional later)."""
 
     name = "generative"
     kind = "background"
 
     def render_frame(self, ctx: EffectContext, params: EffectParams) -> np.ndarray:
+        import math
+
         prompt = str(params.params.get("prompt", "abstract scene"))
         seed = int(params.params.get("seed", abs(hash(prompt)) % (2**31)))
-        rng = np.random.default_rng(seed + ctx.frame_index)
-        noise = rng.integers(0, 255, (ctx.height, ctx.width, 3), dtype=np.uint8)
-        noise = cv2.GaussianBlur(noise, (0, 0), 8)
-        # palette from prompt hash
-        hue = abs(hash(prompt)) % 180
-        base = np.zeros((ctx.height, ctx.width, 3), dtype=np.uint8)
-        base[:] = (hue % 255, 180, 40)
-        base = cv2.cvtColor(base, cv2.COLOR_HSV2BGR)
-        out = cv2.addWeighted(base, 0.55, noise, 0.45, 0)
-        if ctx.source_frame is not None:
-            # preserve some structure for temporal feel
-            soft = cv2.GaussianBlur(ctx.source_frame, (0, 0), 20)
-            out = cv2.addWeighted(out, 0.7, soft, 0.3, 0)
+        h, w = ctx.height, ctx.width
+        t = float(ctx.timestamp)
+        rng = np.random.default_rng(seed)
+        # prompt-derived palette (HSV)
+        h0 = abs(hash(prompt)) % 180
+        h1 = (h0 + 40 + (seed % 30)) % 180
+        y = np.linspace(0, 1, h)[:, None]
+        x = np.linspace(0, 1, w)[None, :]
+        pulse = 0.5 + 0.5 * math.sin(t * 0.4 + seed % 7)
+        yy = np.clip(y * 180, 0, 179).astype(np.uint8)
+        # vertical blend of two hues
+        hsv = np.zeros((h, w, 3), dtype=np.uint8)
+        hsv[:, :, 0] = ((1 - y) * h0 + y * h1).astype(np.uint8)
+        hsv[:, :, 1] = int(140 + 40 * pulse)
+        hsv[:, :, 2] = (40 + 80 * (1 - y) + 30 * pulse).astype(np.uint8)
+        out = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+        # soft vignette glow
+        cx, cy = 0.5 + 0.05 * math.sin(t), 0.4
+        dist = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
+        glow = (np.clip(1.0 - dist * 1.6, 0, 1) ** 2 * 60).astype(np.float32)
+        out = np.clip(out.astype(np.float32) + glow[..., None], 0, 255).astype(np.uint8)
+        # fine grain (low)
+        noise = rng.integers(0, 24, (h, w, 3), dtype=np.uint8)
+        out = cv2.addWeighted(out, 0.92, noise, 0.08, 0)
         return out

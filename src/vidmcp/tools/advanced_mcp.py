@@ -347,6 +347,140 @@ def register_advanced_tools(
         """Generate a Remotion/JS composition scaffold for web-native explainers."""
         return adv.remotion_scaffold(load_project(project_id), prompt)
 
+    # --- Creator 1.1 tools (audio / captions / BG / export / polish) ---
+    from vidmcp.tools import creator as cr
+
+    @mcp.tool()
+    def process_audio(
+        project_id: str,
+        strength: float = 0.7,
+        target_lufs: float = -14.0,
+    ) -> dict[str, Any]:
+        """Denoise + enhance vocals + loudnorm. Writes audio/vocals_clean.wav on the project."""
+        return cr.process_audio_project(load_project(project_id), strength=strength, target_lufs=target_lufs)
+
+    @mcp.tool()
+    def mix_bgm(
+        project_id: str,
+        bgm_path: str | None = None,
+        volume: float = 0.35,
+        style: str = "cinematic",
+        duck: bool = True,
+    ) -> dict[str, Any]:
+        """Mix copyright-safe ambient BGM under vocals (or user bgm_path). Ducking optional."""
+        return cr.mix_bgm_project(
+            load_project(project_id),
+            bgm_path=bgm_path,
+            volume=volume,
+            style=style,
+            duck=duck,
+        )
+
+    @mcp.tool()
+    def transcribe_and_caption(
+        project_id: str,
+        burn: bool = True,
+        style: str = "brand",
+        language: str | None = None,
+        model_size: str = "base",
+        fallback_transcript: str | None = None,
+    ) -> dict[str, Any]:
+        """ASR word timeline + ASS captions; optionally burn into a new render (brand|karaoke|minimal)."""
+        return cr.transcribe_and_caption_project(
+            load_project(project_id),
+            burn=burn,
+            style=style,
+            language=language,
+            model_size=model_size,
+            fallback_transcript=fallback_transcript,
+        )
+
+    @mcp.tool()
+    def replace_background(
+        project_id: str,
+        plate: str = "space",
+        matte_backend: str = "auto",
+        plate_image: str | None = None,
+    ) -> dict[str, Any]:
+        """Cut out subject (MediaPipe/SAM) and composite over plate: space|blur|solid|image."""
+        return cr.replace_background_project(
+            load_project(project_id),
+            plate=plate,
+            matte_backend=matte_backend,
+            plate_image=plate_image,
+        )
+
+    @mcp.tool()
+    def export_render(
+        project_id: str,
+        render_path: str | None = None,
+        preset: str = "youtube_16x9",
+        loudnorm: bool = True,
+    ) -> dict[str, Any]:
+        """Export last render (or path) to preset: youtube_16x9 | reels_9x16 | square_1x1 | source."""
+        return cr.export_render_project(
+            load_project(project_id),
+            render_path=render_path,
+            preset=preset,
+            loudnorm=loudnorm,
+        )
+
+    @mcp.tool()
+    def smart_cut_hesitations(project_id: str, aggressiveness: float = 0.5) -> dict[str, Any]:
+        """Remove dead air / long fillers (um, basically, …) using transcript + energy gaps."""
+        return cr.smart_cut_project(load_project(project_id), aggressiveness=aggressiveness)
+
+    @mcp.tool()
+    def add_speech_infographics(project_id: str, topic: str = "auto") -> dict[str, Any]:
+        """Burn keyword/number infographic cards locked to transcript timing."""
+        return cr.add_infographics_project(load_project(project_id), topic=topic)
+
+    @mcp.tool()
+    def run_talking_head_polish(
+        video_path: str,
+        preset: str = "youtube_16x9",
+        bg_mode: str = "none",
+        strength: float = 0.7,
+        bgm_volume: float = 0.35,
+        burn_captions: bool = True,
+        smart_cut: bool = False,
+        project_name: str = "talking_head_polish",
+    ) -> dict[str, Any]:
+        """ONE-SHOT: orient → denoise → BGM → optional BG → captions → export preset.
+
+        bg_mode: none | space | blur | solid
+        preset: youtube_16x9 | reels_9x16 | square_1x1 | source
+        """
+        return cr.run_talking_head_polish(
+            video_path,
+            name=project_name,
+            preset=preset,
+            bg_mode=bg_mode,
+            strength=strength,
+            bgm_volume=bgm_volume,
+            burn_captions_flag=burn_captions,
+            smart_cut=smart_cut,
+        )
+
+    @mcp.tool()
+    def export_edl(project_id: str) -> dict[str, Any]:
+        """Export edit decision list JSON (source, audio pipeline, renders, history)."""
+        from vidmcp.edit.edl import export_edl as _export_edl
+
+        return _export_edl(load_project(project_id))
+
+    @mcp.tool()
+    def generate_thumbnail(project_id: str, title: str | None = None) -> dict[str, Any]:
+        """Grab mid-frame thumbnail with title overlay from transcript."""
+        return cr.generate_thumbnail_project(load_project(project_id), title=title)
+
+    @mcp.tool()
+    def list_tool_packs() -> dict[str, Any]:
+        """List agent tool packs (talking_head, education, vfx_matte)."""
+        from vidmcp.harness.packs import list_packs
+
+        return {"ok": True, "packs": list_packs()}
+
     @mcp.tool()
     def list_marketplace_recipes() -> dict[str, Any]:
         """List builtin + installed marketplace recipe plugins."""

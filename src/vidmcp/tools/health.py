@@ -19,6 +19,8 @@ def platform_health() -> dict[str, Any]:
         "ffprobe": shutil.which("ffprobe") is not None,
         "faster_whisper": importlib.util.find_spec("faster_whisper") is not None,
         "openai_whisper": importlib.util.find_spec("whisper") is not None,
+        "mediapipe": importlib.util.find_spec("mediapipe") is not None,
+        "mlx": importlib.util.find_spec("mlx") is not None,
         "manim": manim_available(),
         "blender": blender_available(),
         "ultralytics": importlib.util.find_spec("ultralytics") is not None,
@@ -30,11 +32,14 @@ def platform_health() -> dict[str, Any]:
     }
     weights = describe_weights_status(s.sam_weights)
     ready_education = checks["ffmpeg"] and (checks["faster_whisper"] or checks["macos_say"])
-    ready_sam = checks["sam3_official"] or checks["ultralytics"]
-    ready_sam_full = ready_sam and bool(weights.get("found"))
+    ready_creator = checks["ffmpeg"]  # denoise/bgm/export always; ASR/matte optional
+    ready_sam = checks["sam3_official"] or checks["ultralytics"] or checks["mlx"]
+    ready_sam_full = ready_sam and (bool(weights.get("found")) or checks["mlx"])
+    from vidmcp import __version__
+
     return {
         "ok": True,
-        "version": "0.5.0",
+        "version": __version__,
         "checks": checks,
         "sam_weights": weights,
         "config": {
@@ -45,6 +50,9 @@ def platform_health() -> dict[str, Any]:
         },
         "readiness": {
             "education_path": ready_education,
+            "creator_path": ready_creator,
+            "creator_asr": checks["faster_whisper"] or checks["openai_whisper"],
+            "creator_matte_fast": checks["mediapipe"],
             "sam_package": ready_sam,
             "sam_with_weights": ready_sam_full,
             "live_mock": checks["ffmpeg"],
@@ -59,7 +67,9 @@ def _next_steps(checks: dict, weights: dict, sam_full: bool, edu: bool) -> list[
     if not checks["ffmpeg"]:
         steps.append("Install ffmpeg (brew install ffmpeg)")
     if not checks["faster_whisper"]:
-        steps.append("pip install faster-whisper  # better ASR")
+        steps.append("pip install faster-whisper  # better ASR for captions")
+    if not checks.get("mediapipe"):
+        steps.append("pip install mediapipe  # fast talking-head BG replace")
     if not sam_full:
         if not checks["sam3_official"] and not checks["ultralytics"]:
             steps.append("Optional: pip install ultralytics OR install facebookresearch/sam3")

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.gif" width="640" alt="VidMCP flow field" />
+  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif" width="640" alt="VidMCP 1.1 Creator polish" />
 </p>
 
 <h1 align="center">VidMCP</h1>
@@ -10,51 +10,93 @@
 
 <p align="center">
   <a href="https://vidmcp.com"><img alt="Website" src="https://img.shields.io/badge/vidmcp.com-d4ff2a?style=flat-square&labelColor=050507&color=d4ff2a" /></a>
-  <a href="https://dhirajlochib.com/"><img alt="Author" src="https://img.shields.io/badge/Dhiraj%20Lochib-2affd1?style=flat-square&labelColor=050507&color=2affd1" /></a>
-  <a href="https://github.com/dhirajlochib/VidMcp"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-b18cff?style=flat-square&labelColor=050507&color=b18cff" /></a>
+  <a href="https://pypi.org/project/vidmcp/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-1.1.0-2affd1?style=flat-square&labelColor=050507" /></a>
+  <a href="https://dhirajlochib.com/"><img alt="Author" src="https://img.shields.io/badge/Dhiraj%20Lochib-b18cff?style=flat-square&labelColor=050507" /></a>
   <img alt="Python" src="https://img.shields.io/badge/Python_3.11+-ffa24e?style=flat-square&labelColor=050507" />
   <img alt="License" src="https://img.shields.io/badge/MIT-efefeb?style=flat-square&labelColor=050507" />
 </p>
 
 <p align="center">
-  <b>MCP server</b> for text-prompt mattes · behind-the-subject VFX · education scenes<br/>
-  Built by <a href="https://dhirajlochib.com/">Dhiraj Lochib</a> · Site <a href="https://vidmcp.com">vidmcp.com</a>
+  <b>MCP server</b> for agent video editing — mattes · behind-the-subject VFX · audio polish · captions · export<br/>
+  Built by <a href="https://dhirajlochib.com/">Dhiraj Lochib</a> · <a href="https://vidmcp.com">vidmcp.com</a> · <code>uv tool install vidmcp</code>
 </p>
+
+---
+
+## What’s new in 1.1 — Creator pipeline
+
+One call for a publish-ready talk-head:
+
+```text
+orient → denoise → BGM → captions → optional BG replace → export preset
+```
+
+| Tool | What it does |
+|------|----------------|
+| `run_talking_head_polish` | Full recipe in one shot |
+| `process_audio` | Denoise · gate · EQ · loudnorm |
+| `mix_bgm` | Ambient pad under voice (ducking) |
+| `transcribe_and_caption` | Whisper words + brand burn-in |
+| `replace_background` | Matte + space / blur / solid plate |
+| `smart_cut_hesitations` | Dead air & filler removal |
+| `export_render` | `youtube_16x9` · `reels_9x16` · `square_1x1` |
+| `import_video` | **Bakes portrait rotation** upright by default |
+
+```python
+from vidmcp.tools.creator import run_talking_head_polish
+
+print(run_talking_head_polish(
+    "talk.mov",
+    preset="reels_9x16",
+    bg_mode="space",   # none | space | blur | solid
+    strength=0.75,
+    bgm_volume=0.35,
+))
+```
+
+MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` or `list_tool_packs()`.
 
 ---
 
 ## Gallery
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.gif" width="520" alt="Behind the subject" /><br/>
-  <sub>Behind the subject — particles under the matte</sub>
+  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif" width="560" alt="Creator 1.1" /><br/>
+  <sub><b>1.1 Creator polish</b> — orient · denoise · BGM · captions · export</sub>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.gif" width="480" alt="BG replace" /><br/>
+  <sub><b>Background replace</b> — person matte over animated space plate</sub>
 </p>
 
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.gif" width="100%" alt="Tesseract" /><br/>
-      <sub><b>Tesseract</b> · 4D with trails</sub>
+      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.gif" width="100%" alt="Behind subject" /><br/>
+      <sub><b>Behind the subject</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/04_kinetic.gif" width="100%" alt="Kinetic" /><br/>
-      <sub><b>Kinetic</b> · agent edit language</sub>
+      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.gif" width="100%" alt="Tesseract" /><br/>
+      <sub><b>Tesseract</b> · 4D trails</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/05_unit_circle.gif" width="100%" alt="Unit circle" /><br/>
-      <sub><b>Unit circle</b> · live sin / cos</sub>
+      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.gif" width="100%" alt="Flow" /><br/>
+      <sub><b>Flow field</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/06_pipeline.gif" width="100%" alt="Pipeline" /><br/>
-      <sub><b>Pipeline</b> · import → render</sub>
+      <img src="https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/05_unit_circle.gif" width="100%" alt="Unit circle" /><br/>
+      <sub><b>Unit circle</b></sub>
     </td>
   </tr>
 </table>
 
 | Sample | GIF | MP4 |
 |--------|-----|-----|
+| **Creator 1.1** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/07_creator_polish.mp4) |
+| **BG replace** | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/08_bg_replace.mp4) |
 | Flow field | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/01_flowfield.mp4) |
 | Tesseract | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/02_tesseract.mp4) |
 | Behind the subject | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/03_behind_subject.mp4) |
@@ -62,49 +104,29 @@
 | Unit circle | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/05_unit_circle.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/05_unit_circle.mp4) |
 | Pipeline | [gif](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/06_pipeline.gif) | [mp4](https://raw.githubusercontent.com/dhirajlochib/VidMcp/main/demos/samples/06_pipeline.mp4) |
 
-```bash
-python scripts/generate_samples.py
-```
-
 ---
 
 ## Install
 
-**Needs:** Python 3.11+, [ffmpeg](https://ffmpeg.org/), [uv](https://docs.astral.sh/uv/) (recommended)
-
-### One-liner (recommended)
+**Needs:** Python 3.11+, [ffmpeg](https://ffmpeg.org/), [uv](https://docs.astral.sh/uv/) recommended
 
 ```bash
 uv tool install vidmcp
 vidmcp --doctor
+
+# or
+pip install 'vidmcp[creator]'   # + faster-whisper + mediapipe
 ```
 
-Or without a global tool install:
+### MCP (Grok / Claude / Cursor)
 
 ```bash
-uvx vidmcp
-```
-
-Classic pip:
-
-```bash
-pip install vidmcp
-```
-
-### Grok / Claude / Cursor (MCP)
-
-**Grok:**
-
-```bash
+# Grok
 grok mcp add vidmcp \
   -e VIDMCP_SAM_BACKEND=mock \
-  -e VIDMCP_WORKSPACE_ROOT="$HOME/vidmcp-workspaces" \
-  -- $(which vidmcp)
-# or: -- uvx vidmcp
-grok mcp doctor vidmcp
+  -e VIDMCP_WORKSPACE_ROOT=$HOME/vidmcp-workspaces \
+  -- uvx vidmcp
 ```
-
-**Claude Desktop** — `claude_desktop_config.json`:
 
 ```json
 {
@@ -114,61 +136,52 @@ grok mcp doctor vidmcp
       "args": ["vidmcp"],
       "env": {
         "VIDMCP_SAM_BACKEND": "mock",
-        "VIDMCP_WORKSPACE_ROOT": "/Users/YOU/vidmcp-workspaces"
+        "VIDMCP_WORKSPACE_ROOT": "/path/to/workspaces"
       }
     }
   }
 }
 ```
 
-**Claude Code:**
+Optional real matte on Apple Silicon:
 
 ```bash
-claude mcp add vidmcp -s user -- uvx vidmcp
-```
-
-### Optional extras
-
-```bash
-uv tool install 'vidmcp[mlx]'   # Apple Silicon SAM 3.1
-uv tool install 'vidmcp[sam]'   # CUDA / Ultralytics
-```
-
-### From source (dev)
-
-```bash
-git clone https://github.com/dhirajlochib/VidMcp.git
-cd VidMcp
-uv venv && source .venv/bin/activate
-uv pip install -e ".[dev]"
+pip install 'vidmcp[mlx]'
+export VIDMCP_SAM_BACKEND=mlx
+export VIDMCP_MLX_MODEL_ID=mlx-community/sam3.1-bf16
 ```
 
 ---
 
-## What it does
+## Core product
 
 | | |
 |---|---|
-| **Segment** | Text-prompt subject matte (SAM / MLX / mock) |
+| **Segment** | Text-prompt subject matte (SAM / MLX / MediaPipe / mock) |
 | **Compose** | Effects *behind* the subject |
-| **Educate** | Math plates + narration hooks |
-| **Harness** | Plan → perceive → critic gates |
+| **Audio** | Denoise, enhance, BGM duck, loudnorm |
+| **Captions** | Whisper timeline + brand burn-in |
+| **Educate** | Math plates + speech-locked scenes |
+| **Export** | 16:9 · 9:16 · 1:1 without stretch |
 
+```text
+create_project → import_video (orient)
+  → process_audio → mix_bgm
+  → segment_subject | replace_background
+  → transcribe_and_caption → export_render
 ```
-create_project → import_video → segment_subject
-  → apply_background_effects → composite_and_render
-```
+
+Prefer high-level paths: `run_talking_head_polish` · `apply_recipe` · `run_quality_gated_pipeline`.
 
 ---
 
-## Project
+## Project layout
 
 ```text
-src/vidmcp/       MCP server + tools
-demos/samples/    GIFs · MP4s · stills
-site/             vidmcp.com (Hostinger)
-configs/          Claude / Cursor
-scripts/          generate_samples.py
+src/vidmcp/     MCP server, creator tools, perception, effects
+demos/samples/  GIFs · MP4s for README & site
+site/           vidmcp.com (static Hostinger)
+configs/        Claude / Cursor snippets
 ```
 
 ---
