@@ -54,7 +54,30 @@ print(run_talking_head_polish(
 ))
 ```
 
-MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` or `list_tool_packs()`.
+MCP agents can also call `apply_recipe(..., recipe_name="talking_head_polish")` or free-text `run_intent(...)`.
+
+### Agent context (tool packs + compact results)
+
+Agents drown when MCP hosts load **~90 tool schemas** and fat JSON. VidMCP defaults to a small surface:
+
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `VIDMCP_TOOL_PACK` | `talking_head` | Expose only the tools for that product path |
+| `VIDMCP_COMPACT` | `1` | Drop heavy keys / truncate long payloads |
+| `VIDMCP_MAX_RESULT_CHARS` | `4000` | Hard cap on serialized tool results |
+
+**Packs:** `talking_head` · `education` · `vfx` · `admin` · `all`
+
+```text
+run_intent("polish talk head for reels, space bg, cut fillers", video_path="talk.mov")
+project_brief(project_id)          # prefer over full get_project
+list_tool_packs() / set_tool_pack("vfx")
+get_project(id, detail=true)       # full manifest only when needed
+```
+
+Recipes: `talking_head_polish` · `talking_head_reels` · `talking_head_space` · `talking_head_tight` · `talking_head_infographics`.
+
+For full surface (debug): `VIDMCP_TOOL_PACK=all`.
 
 ---
 
@@ -119,6 +142,8 @@ pip install 'vidmcp[creator]'   # + faster-whisper + mediapipe
 grok mcp add vidmcp \
   -e VIDMCP_SAM_BACKEND=mock \
   -e VIDMCP_WORKSPACE_ROOT=$HOME/vidmcp-workspaces \
+  -e VIDMCP_TOOL_PACK=talking_head \
+  -e VIDMCP_COMPACT=1 \
   -- uvx vidmcp
 ```
 
@@ -130,7 +155,9 @@ grok mcp add vidmcp \
       "args": ["vidmcp"],
       "env": {
         "VIDMCP_SAM_BACKEND": "mock",
-        "VIDMCP_WORKSPACE_ROOT": "/path/to/workspaces"
+        "VIDMCP_WORKSPACE_ROOT": "/path/to/workspaces",
+        "VIDMCP_TOOL_PACK": "talking_head",
+        "VIDMCP_COMPACT": "1"
       }
     }
   }

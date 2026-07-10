@@ -444,12 +444,19 @@ def register_advanced_tools(
         bgm_volume: float = 0.35,
         burn_captions: bool = True,
         smart_cut: bool = False,
+        process_audio: bool = True,
+        mix_bgm: bool = True,
+        infographics: bool = False,
+        infographic_topic: str = "auto",
+        thumbnail: bool = False,
+        aggressiveness: float = 0.45,
         project_name: str = "talking_head_polish",
     ) -> dict[str, Any]:
-        """ONE-SHOT: orient → denoise → BGM → optional BG → captions → export preset.
+        """ONE-SHOT creator polish: orient → denoise → BGM → optional cut/BG/captions/cards → export.
 
         bg_mode: none | space | blur | solid
         preset: youtube_16x9 | reels_9x16 | square_1x1 | source
+        Toggle stages with process_audio / mix_bgm / smart_cut / infographics / thumbnail.
         """
         return cr.run_talking_head_polish(
             video_path,
@@ -460,14 +467,21 @@ def register_advanced_tools(
             bgm_volume=bgm_volume,
             burn_captions_flag=burn_captions,
             smart_cut=smart_cut,
+            process_audio=process_audio,
+            mix_bgm=mix_bgm,
+            infographics=infographics,
+            infographic_topic=infographic_topic,
+            thumbnail=thumbnail,
+            aggressiveness=aggressiveness,
         )
 
     @mcp.tool()
     def export_edl(project_id: str) -> dict[str, Any]:
         """Export edit decision list JSON (source, audio pipeline, renders, history)."""
         from vidmcp.edit.edl import export_edl as _export_edl
+        from vidmcp.utils.compact import compact_result
 
-        return _export_edl(load_project(project_id))
+        return compact_result(_export_edl(load_project(project_id)))
 
     @mcp.tool()
     def generate_thumbnail(project_id: str, title: str | None = None) -> dict[str, Any]:
@@ -476,10 +490,82 @@ def register_advanced_tools(
 
     @mcp.tool()
     def list_tool_packs() -> dict[str, Any]:
-        """List agent tool packs (talking_head, education, vfx_matte)."""
+        """List agent tool packs: talking_head (default), education, vfx, admin, all."""
+        from vidmcp.config import get_settings as _gs
         from vidmcp.harness.packs import list_packs
 
-        return {"ok": True, "packs": list_packs()}
+        s = _gs()
+        return {
+            "ok": True,
+            "active": s.tool_pack,
+            "compact": s.compact,
+            "max_result_chars": s.max_result_chars,
+            "packs": list_packs(),
+            "env": "VIDMCP_TOOL_PACK=talking_head|education|vfx|admin|all",
+        }
+
+    @mcp.tool()
+    def set_tool_pack(pack: str) -> dict[str, Any]:
+        """Switch active tool pack and remove out-of-pack tools from this server process.
+
+        Expanding to a larger pack (e.g. all) after a smaller pack requires server restart
+        with VIDMCP_TOOL_PACK set — removed tools cannot be re-registered mid-session.
+        """
+        from vidmcp.config import get_settings as _gs
+        from vidmcp.harness.packs import apply_tool_pack_filter, get_pack, list_packs
+
+        key = (pack or "talking_head").strip().lower()
+        try:
+            info = get_pack(key)
+        except KeyError as e:
+            return {"ok": False, "message": str(e), "packs": list_packs()}
+        s = _gs()
+        s.tool_pack = info["name"]
+        filt = apply_tool_pack_filter(mcp, info["name"])
+        return {
+            "ok": True,
+            "pack": info["name"],
+            "description": info["description"],
+            "filter": filt,
+            "note": "To restore full surface restart with VIDMCP_TOOL_PACK=all",
+        }
+
+    @mcp.tool()
+    def project_brief(project_id: str, detail: bool = False) -> dict[str, Any]:
+        """Compact project summary for agents (status, paths, next steps). Prefer over get_project."""
+        from vidmcp.harness.intent import build_project_brief
+        from vidmcp.utils.compact import compact_result
+
+        return compact_result(build_project_brief(load_project(project_id), detail=detail))
+
+    @mcp.tool()
+    def run_intent(
+        intent: str,
+        video_path: str | None = None,
+        project_name: str = "intent_run",
+        preset: str = "youtube_16x9",
+        bg_mode: str = "none",
+        dry_run: bool = False,
+    ) -> dict[str, Any]:
+        """Route free-text intent to the right pipeline (polish / recipe / education / VFX).
+
+        Examples: 'polish talk head for reels with space bg', 'tight cut no filler',
+        'cyberpunk behind speaker', 'teach Bayes with math plate'.
+        dry_run=true returns the plan only. video_path required to execute.
+        """
+        from vidmcp.harness.intent import resolve_intent
+        from vidmcp.utils.compact import compact_result
+
+        return compact_result(
+            resolve_intent(
+                intent,
+                video_path=video_path,
+                project_name=project_name,
+                preset=preset,
+                bg_mode=bg_mode,
+                dry_run=dry_run,
+            )
+        )
 
     @mcp.tool()
     def list_marketplace_recipes() -> dict[str, Any]:
@@ -546,17 +632,6 @@ def register_advanced_tools(
         except Exception as e:
             log.exception("fast_edu_harness_failed")
             return {"ok": False, "message": str(e)}
-
-    @mcp.tool()
-    def list_tool_packs() -> dict[str, Any]:
-        """List reduced tool packs for reliable agent use (education vs creator_vfx)."""
-        from vidmcp.harness.contracts import TOOL_PACKS
-
-        return {
-            "ok": True,
-            "packs": {k: v for k, v in TOOL_PACKS.items()},
-            "note": "Agents should use a pack allowlist to avoid 76-tool confusion and loops.",
-        }
 
     @mcp.tool()
     def run_ultimate_pipeline(

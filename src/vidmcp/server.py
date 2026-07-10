@@ -37,13 +37,15 @@ log = get_logger("vidmcp.server")
 mcp = FastMCP(
     "VidMCP",
     instructions=(
-        "VidMCP is an ADVANCED production AI video editing MCP — far beyond trim/concat tools. "
-        "Core: SAM 3.1 Object Multiplex text-promptable multi-object segmentation+tracking, "
-        "non-destructive layer stacks, quality-gated multi-pass harness, A/B variants, recipes. "
-        "Prefer: run_quality_gated_pipeline or apply_recipe for complex intents; "
-        "segment_multi_objects for multi-concept; generate_edit_variants after one matte; "
-        "evaluate_quality_gates / matte_diagnostics for QA loops; never overwrite source. "
-        "Workflow: analyze → segment (or multi) → refine_segment_keyframes if flicker → render_math_scene / compile_scene_code for BG plates → effects → composite → gates. Education: talking_head_math_lesson / compile_lesson. Advanced: run_ultimate_pipeline, run_viddsl, graph_*, compute_uncertainty_field, run_critic_ensemble, propose_edit_strategies, sign_render, mine_failures. Weights: ensure_sam_weights."
+        "VidMCP is an ADVANCED production AI video editing MCP. "
+        "CONTEXT CONTROL: default tool pack is talking_head (small surface). "
+        "Prefer run_intent(video_path, intent) or run_talking_head_polish for creator work; "
+        "project_brief(project_id) instead of full get_project; list_tool_packs / set_tool_pack "
+        "to switch packs (education|vfx|admin|all). Results are compact by default "
+        "(VIDMCP_COMPACT=0 for full payloads; get_project(detail=true) for full manifest). "
+        "Complex VFX: apply_recipe / run_quality_gated_pipeline; multi-object: segment_multi_objects; "
+        "QA: evaluate_quality_gates / matte_diagnostics. Never overwrite source. "
+        "Education: run_fast_education_harness / talking_head_math_lesson. Weights: ensure_sam_weights."
     ),
 )
 
@@ -91,14 +93,28 @@ def create_project(name: str = "untitled", video_path: str | None = None) -> dic
 @mcp.tool()
 def list_projects() -> dict[str, Any]:
     """List all projects in the workspace with status and source paths."""
-    return {"ok": True, "projects": _ws().list_projects()}
+    from vidmcp.utils.compact import compact_result
+
+    return compact_result({"ok": True, "projects": _ws().list_projects()})
 
 
 @mcp.tool()
-def get_project(project_id: str) -> dict[str, Any]:
-    """Return full project manifest (layers, segments, renders, history)."""
+def get_project(project_id: str, detail: bool = False) -> dict[str, Any]:
+    """Project info. Default is compact brief; detail=true returns full manifest (large)."""
+    from vidmcp.harness.intent import build_project_brief
+    from vidmcp.utils.compact import compact_result
+
     store = _load(project_id)
-    return {"ok": True, "project": store.manifest.model_dump(mode="json"), "root": str(store.root)}
+    if not detail:
+        return compact_result(build_project_brief(store, detail=False))
+    return compact_result(
+        {
+            "ok": True,
+            "project": store.manifest.model_dump(mode="json"),
+            "root": str(store.root),
+        },
+        force=False,  # respect VIDMCP_COMPACT only when user asked for detail
+    )
 
 
 @mcp.tool()
@@ -1009,6 +1025,17 @@ Do NOT stop at a single composite without evaluate_quality_gates.
 
 def create_server() -> FastMCP:
     setup_logging(get_settings().log_level)
-    get_settings().ensure_dirs()
-    log.info("vidmcp_server_ready", version=__version__)
+    settings = get_settings()
+    settings.ensure_dirs()
+    from vidmcp.harness.packs import apply_tool_pack_filter
+
+    pack_info = apply_tool_pack_filter(mcp, settings.tool_pack)
+    log.info(
+        "vidmcp_server_ready",
+        version=__version__,
+        tool_pack=pack_info.get("pack"),
+        tools_kept=pack_info.get("kept"),
+        tools_removed=pack_info.get("removed"),
+        compact=settings.compact,
+    )
     return mcp

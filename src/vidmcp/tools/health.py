@@ -47,6 +47,10 @@ def platform_health() -> dict[str, Any]:
             "sam_use_multiplex": s.sam_use_multiplex,
             "workspace": str(s.workspace_root),
             "device": s.device,
+            "tool_pack": s.tool_pack,
+            "compact": s.compact,
+            "max_result_chars": s.max_result_chars,
+            "matte_quality": s.matte_quality,
         },
         "readiness": {
             "education_path": ready_education,

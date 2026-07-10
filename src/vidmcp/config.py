@@ -60,6 +60,12 @@ class Settings(BaseSettings):
     harness_variant_count: int = 3
     allow_import_outside_workspace: bool = True
     import_copy_into_workspace: bool = True
+    # Agent context control (see harness/packs.py)
+    # talking_head | education | vfx | admin | all
+    tool_pack: str = "talking_head"
+    compact: bool = True
+    max_result_chars: int = 4000
+    matte_quality: Literal["preview", "final"] = "preview"
 
     @field_validator("workspace_root", "sam_weights", mode="before")
     @classmethod
@@ -67,6 +73,18 @@ class Settings(BaseSettings):
         if v is None or v == "":
             return None
         return Path(str(v)).expanduser().resolve()
+
+    @field_validator("tool_pack", mode="before")
+    @classmethod
+    def _normalize_pack(cls, v: object) -> str:
+        s = str(v or "talking_head").strip().lower()
+        aliases = {
+            "vfx_matte": "vfx",
+            "creator": "talking_head",
+            "default": "talking_head",
+            "full": "all",
+        }
+        return aliases.get(s, s)
 
     def ensure_dirs(self) -> None:
         self.workspace_root.mkdir(parents=True, exist_ok=True)

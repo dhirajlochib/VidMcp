@@ -209,6 +209,14 @@ class HarnessRuntime:
                 name=project_name or recipe["name"],
                 preset=str(recipe.get("preset") or "youtube_16x9"),
                 bg_mode=str(recipe.get("bg_mode") or "none"),
+                process_audio=bool(recipe.get("process_audio", True)),
+                mix_bgm=bool(recipe.get("mix_bgm", True)),
+                burn_captions_flag=bool(recipe.get("captions", True)),
+                smart_cut=bool(recipe.get("smart_cut", False)),
+                aggressiveness=float(recipe.get("aggressiveness", 0.45)),
+                infographics=bool(recipe.get("infographics", False)),
+                infographic_topic=str(recipe.get("infographic_topic") or "auto"),
+                thumbnail=bool(recipe.get("thumbnail", False)),
             )
 
         project = self.workspace.create_project(name=project_name or recipe["name"])

@@ -381,26 +381,40 @@ def run_talking_head_polish(
     burn_captions_flag: bool = True,
     smart_cut: bool = False,
     aggressiveness: float = 0.45,
+    process_audio: bool = True,
+    mix_bgm: bool = True,
+    infographics: bool = False,
+    infographic_topic: str = "auto",
+    thumbnail: bool = False,
+    thumbnail_title: str | None = None,
+    bake_orientation: bool = True,
 ) -> dict[str, Any]:
-    """One-shot creator pipeline."""
+    """One-shot creator pipeline: orient → audio → BGM → cut → BG → captions → cards → export.
+
+    Flags keep the agent surface small: one tool, many optional stages.
+    """
     from vidmcp.config import get_settings
     from vidmcp.core.workspace import Workspace as WS
+    from vidmcp.utils.compact import compact_result
 
     ws = workspace or WS(get_settings())
     project = ws.create_project(name)
-    import_source(project, video_path, bake_orientation=True)
+    import_source(project, video_path, bake_orientation=bake_orientation)
     analyze(project)
     warnings: list[str] = []
     steps: dict[str, Any] = {}
 
-    try:
-        steps["process_audio"] = process_audio_project(project, strength=strength)
-    except Exception as e:  # noqa: BLE001
-        warnings.append(f"process_audio: {e}")
-    try:
-        steps["mix_bgm"] = mix_bgm_project(project, volume=bgm_volume)
-    except Exception as e:  # noqa: BLE001
-        warnings.append(f"mix_bgm: {e}")
+    if process_audio:
+        try:
+            steps["process_audio"] = process_audio_project(project, strength=strength)
+        except Exception as e:  # noqa: BLE001
+            warnings.append(f"process_audio: {e}")
+
+    if mix_bgm:
+        try:
+            steps["mix_bgm"] = mix_bgm_project(project, volume=bgm_volume)
+        except Exception as e:  # noqa: BLE001
+            warnings.append(f"mix_bgm: {e}")
 
     if smart_cut:
         try:
@@ -414,25 +428,55 @@ def run_talking_head_polish(
         except Exception as e:  # noqa: BLE001
             warnings.append(f"replace_background: {e}")
 
-    try:
-        steps["caption"] = transcribe_and_caption_project(project, burn=burn_captions_flag)
-    except Exception as e:  # noqa: BLE001
-        warnings.append(f"caption: {e}")
+    if burn_captions_flag:
+        try:
+            steps["caption"] = transcribe_and_caption_project(project, burn=True)
+        except Exception as e:  # noqa: BLE001
+            warnings.append(f"caption: {e}")
+
+    if infographics:
+        try:
+            steps["infographics"] = add_infographics_project(project, topic=infographic_topic)
+        except Exception as e:  # noqa: BLE001
+            warnings.append(f"infographics: {e}")
 
     try:
         steps["export"] = export_render_project(project, preset=preset, loudnorm=True)
     except Exception as e:  # noqa: BLE001
         warnings.append(f"export: {e}")
 
+    if thumbnail:
+        try:
+            steps["thumbnail"] = generate_thumbnail_project(project, title=thumbnail_title)
+        except Exception as e:  # noqa: BLE001
+            warnings.append(f"thumbnail: {e}")
+
     project.manifest.status = ProjectStatus.RENDERED
+    project.manifest.append_history(
+        "run_talking_head_polish",
+        {
+            "preset": preset,
+            "bg_mode": bg_mode,
+            "smart_cut": smart_cut,
+            "infographics": infographics,
+            "mix_bgm": mix_bgm,
+            "process_audio": process_audio,
+        },
+    )
     project.save()
     final = None
     if project.manifest.renders:
         final = project.abs(project.manifest.renders[-1]["path"])
-    return {
+    out = {
         "ok": True,
         "project_id": project.manifest.id,
         "final_path": str(final) if final else None,
-        "steps": {k: {kk: vv for kk, vv in v.items() if kk != "raw"} if isinstance(v, dict) else v for k, v in steps.items()},
+        "preset": preset,
+        "bg_mode": bg_mode,
+        "steps": {
+            k: {kk: vv for kk, vv in v.items() if kk != "raw"} if isinstance(v, dict) else v
+            for k, v in steps.items()
+        },
         "warnings": warnings,
     }
+    return compact_result(out)

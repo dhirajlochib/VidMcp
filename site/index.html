@@ -135,11 +135,23 @@
         <article class="cl-item">
           <div class="cl-date">Latest</div>
           <div class="cl-body">
+            <h3>Agent context control</h3>
+            <ul>
+              <li>Default tool pack <code>talking_head</code> — ~20 tools instead of ~90</li>
+              <li><code>run_intent</code> · <code>project_brief</code> · <code>list_tool_packs</code> / <code>set_tool_pack</code></li>
+              <li>Compact results by default (<code>VIDMCP_COMPACT=1</code>)</li>
+              <li>Packs: talking_head · education · vfx · admin · all</li>
+            </ul>
+          </div>
+        </article>
+        <article class="cl-item">
+          <div class="cl-date">Creator</div>
+          <div class="cl-body">
             <h3>Creator polish path</h3>
             <ul>
               <li><code>run_talking_head_polish</code> — one-shot orient → denoise → BGM → captions → export</li>
-              <li><code>process_audio</code> · <code>mix_bgm</code> · <code>transcribe_and_caption</code></li>
-              <li><code>replace_background</code> · <code>smart_cut_hesitations</code> · <code>export_render</code></li>
+              <li>Flags: smart_cut · infographics · mix_bgm · process_audio · thumbnail</li>
+              <li>Recipes: reels · space · tight · infographics</li>
               <li>Portrait rotation baked on <code>import_video</code> by default</li>
             </ul>
           </div>
@@ -213,12 +225,16 @@ vidmcp --doctor">Copy</button>
               <span class="term-title">mcp · host</span>
               <button type="button" class="term-copy" data-copy="uvx vidmcp
 # VIDMCP_SAM_BACKEND=mock
-# VIDMCP_WORKSPACE_ROOT=~/vidmcp-workspaces">Copy</button>
+# VIDMCP_WORKSPACE_ROOT=~/vidmcp-workspaces
+# VIDMCP_TOOL_PACK=talking_head
+# VIDMCP_COMPACT=1">Copy</button>
             </div>
             <div class="term-body">
               <div><span class="prompt">$</span> <span class="cmd">uvx vidmcp</span></div>
               <div class="cmt"># VIDMCP_SAM_BACKEND=mock</div>
               <div class="cmt"># VIDMCP_WORKSPACE_ROOT=~/vidmcp-workspaces</div>
+              <div class="cmt"># VIDMCP_TOOL_PACK=talking_head</div>
+              <div class="cmt"># VIDMCP_COMPACT=1</div>
             </div>
           </div>
         </div>
